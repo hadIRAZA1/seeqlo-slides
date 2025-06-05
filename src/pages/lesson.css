@@ -1,0 +1,78 @@
+.comparison-container {
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+  position: relative;
+}
+
+.main-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-shadow: 2px 2px 5px #000;
+}
+
+.slider-wrapper {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.slider-track {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  width: 300px;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+.card-image {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  border: none;
+  color: white;
+  padding: 1rem;
+  font-size: 2rem;
+  cursor: pointer;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.arrow.left {
+  left: 10px;
+}
+
+.arrow.right {
+  right: 10px;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  margin: 0.5rem 0;
+}
+
+.card-description {
+  font-size: 0.95rem;
+  margin: 0.5rem 0;
+}
+
+.card-try-this {
+  font-weight: bold;
+  margin-top: 1rem;
+  color: #FFD700;
+}

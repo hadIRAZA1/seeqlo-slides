@@ -1,0 +1,101 @@
+/* lesson-slider.css */
+
+/* Ensure minimum screen height for consistent layout */
+.min-h-screen {
+  min-height: 100vh;
+}
+
+/* Custom animation delays (can be expanded) */
+.animate-bounce {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(-5%);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+/* Icon animation helper */
+[class*="icon-float-"] {
+  animation: floatIcon 2s infinite ease-in-out;
+}
+
+@keyframes floatIcon {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Slide dot active and inactive styles */
+.slide-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+  background-color: #d1d5db;
+  transition: all 0.3s;
+}
+
+.slide-dot.active {
+  background-image: linear-gradient(to right, #22c55e, #3b82f6);
+  transform: scale(1.25);
+}
+
+/* Progress bar animation */
+.progress-inner {
+  height: 100%;
+  border-radius: 9999px;
+  background-image: linear-gradient(to right, #a3e635, #10b981);
+  transition: width 0.5s ease-out;
+  box-shadow: 0 0 3px rgba(0,0,0,0.1);
+}
+
+/* Hover effect on main icon */
+.main-icon-container:hover {
+  transform: scale(1.05);
+}
+
+.main-icon-container {
+  transition: transform 0.3s;
+}
+
+/* Shadow enhancement for cards */
+.card-shadow {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* Gradient background for buttons */
+.btn-gradient {
+  background-image: linear-gradient(to right, #22c55e, #3b82f6);
+  color: white;
+  font-weight: bold;
+  transition: all 0.3s;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-gradient:hover {
+  filter: brightness(1.1);
+  transform: scale(1.05);
+}
+
+/* Responsive utilities */
+@media (max-width: 640px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}
+
+@media (min-width: 641px) {
+  .show-on-desktop {
+    display: inline-block;
+  }
+}
