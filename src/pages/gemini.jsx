@@ -1,8 +1,19 @@
-import React, { useState } from 'react';
+// C:/Users/HP/ui/src/pages/gemini.jsx
+import React, { useState, useEffect } from 'react'; // Import useEffect for window resize
 
 const GeminiLesson = ({ onToggleAI }) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [selectedAI, setSelectedAI] = useState('gemini'); // Start with Gemini selected
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768); // State for mobile detection
+
+  // Update isMobile on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768); // Define your mobile breakpoint
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Test data for Gemini slides
   const slidesData = [
@@ -18,170 +29,185 @@ const GeminiLesson = ({ onToggleAI }) => {
     },
     {
       slideNumber: 2,
-      title: "What are Whole Numbers Anyway? 🤔",
-      concept: "Whole Numbers: Our Counting Friends!",
-      content: "Whole numbers are the basic counting numbers we use every day, starting from 0, 1, 2, 3, and going up, up, up! They don't have any fractions or decimals.",
-      bgColor: "#4ECDC4", // Teal
-      visual: "Examples of whole numbers in daily life:\n- Calendar: 30 days\n- Price tag: $25\n- Bus number: 10\n- Game score: Home 50 - Visitors 35",
-      example: "We use whole numbers to:\n- Count our toys\n- See how many people live in our town\n- Check scores in video games\n- Tell time and dates",
-      tryThis: "Can you spot three whole numbers around you right now?"
+      title: "Decoding Digits: The Building Blocks! 🧱",
+      concept: "Numbers are made of 10 digits: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9",
+      content: "Just like the alphabet's letters form words, these 10 digits create ALL numbers! Think of them as your number LEGOs!",
+      bgColor: "#6A5ACD", // Slate blue
+      visual: "Imagine 74,205. It uses 5 different digits from our building blocks! Each digit is a clue!",
+      example: "Can you list the digits used in the number 98,765?",
+      tryThis: "Count how many digits are in your phone number (don't share the number!)"
     },
     {
       slideNumber: 3,
-      title: "The Super Digits! 🧱",
-      concept: "Digits: The Building Blocks of Numbers!",
-      content: "Every single number, no matter how big, is made from just ten special symbols called digits: 0, 1, 2, 3, 4, 5, 6, 7, 8, and 9.",
-      bgColor: "#45B7D1", // Blue
-      visual: "The 10 Digits:\n0️⃣ 1️⃣ 2️⃣ 3️⃣ 4️⃣\n5️⃣ 6️⃣ 7️⃣ 8️⃣ 9️⃣\n\nThese are like LEGO bricks - you can build any number!",
-      example: "Examples:\n- The number 7 has 1 digit\n- The number 42 has 2 digits\n- The number 1,357 has 4 digits",
-      tryThis: "How many digits are in your age? How about your house number?"
+      title: "Place Value Power-Up! 🌟",
+      concept: "The position of a digit changes its value! It's like VIP seating!",
+      content: "In 45,107, the '4' isn't just 4! Because of its 'seat' in the ten thousands place, it's worth 40,000!",
+      bgColor: "#20B2AA", // Light sea green
+      visual: "A table showing 45,107:\nTen Thousands | Thousands | Hundreds | Tens | Ones\n      4       |     5     |    1     |  0   |  7\nEach digit gets its own house with its own value!",
+      example: "In 83,091, what's the value of the digit '3'? (Hint: Look at its place!)",
+      tryThis: "In the number 62,514, what is the place of the digit '2'? What is its value?"
     },
     {
       slideNumber: 4,
-      title: "Place Value Power! 💪",
-      concept: "Every Digit Has a Home!",
-      content: "Each digit in a number has a special 'place' that tells us its value. It's like an address for the digit! We have ones, tens, hundreds, thousands, and ten thousands.",
-      bgColor: "#96CEB4", // Green
-      visual: "Place Value Chart:\nTen Thousands | Thousands | Hundreds | Tens | Ones\n     2       |    3     |    4     |  5   |  1\n= 23,451",
-      example: "In the number 15,823:\n- 3 is in ones place (value: 3)\n- 2 is in tens place (value: 20)\n- 8 is in hundreds place (value: 800)\n- 5 is in thousands place (value: 5,000)\n- 1 is in ten thousands place (value: 10,000)",
-      tryThis: "In the number 6,789, what is the value of the digit 7?"
+      title: "Reading Big Numbers: A Musical Note 🎶",
+      concept: "Reading big numbers is like reading a song – listen for the 'thousand' beat!",
+      content: "The comma is your musical break! It tells you when to say 'thousand'.",
+      bgColor: "#FFD700", // Gold
+      visual: "78,037 is read as 'seventy-eight thousand, thirty-seven'. The comma is after '78'!",
+      example: "How do you say 92,456 out loud? 'Ninety-two thousand, four hundred fifty-six.'",
+      tryThis: "Read the number 15,600 aloud. How does the comma help you?"
     },
     {
       slideNumber: 5,
-      title: "Going Bigger! The Hundred Thousands Place! 🌟",
-      concept: "Reaching for 100,000!",
-      content: "Now, let's add one more place to our chart: the Hundred Thousands place! This is for really big numbers. See how the pattern repeats: ones, tens, hundreds... then thousands, ten thousands, hundred thousands!",
-      bgColor: "#FFEAA7", // Yellow
-      visual: "Extended Place Value Chart:\nHundred Thousands | Ten Thousands | Thousands | Hundreds | Tens | Ones\n        1         |       0       |     0     |    0     |  0   |  0\n= 100,000",
-      example: "The number 100,000 has:\n- 1 in the hundred thousands place\n- 0 in all other places\n\nRemember: 54,321 is very different from 12,345, even though they use the same digits!",
-      tryThis: "How would you write one hundred thousand using digits?"
+      title: "Zero the Hero! 🦸",
+      concept: "Zero might look like nothing, but it's a SUPER important placeholder!",
+      content: "Without zero, 45,107 would look like 4517 – a totally different number! Zero holds the empty spots so other digits stay in their correct places.",
+      bgColor: "#4682B4", // Steel blue
+      visual: "Imagine a missing tooth in a smile! Zero fills that gap. 1,089 vs. 189 - see the difference zero makes!",
+      example: "What happens if we remove the zeros from 20,304? It becomes 234!",
+      tryThis: "Write a number where zero is in the hundreds place. What does that tell you?"
     },
     {
       slideNumber: 6,
-      title: "How to Read Big Numbers Aloud 🗣️",
-      concept: "Reading Numbers Like a Pro!",
-      content: "When we read big numbers, we group them into 'periods.' The comma helps us separate thousands from the rest. We say the thousands part, then 'thousand,' then the rest.",
-      bgColor: "#DDA0DD", // Plum
-      visual: "Reading 78,037:\n'Seventy-eight THOUSAND, thirty-seven'\n\n78 | , | 037\nThousands | | Units",
-      example: "More examples:\n- 45,107 → 'forty-five thousand, one hundred seven'\n- 92,600 → 'ninety-two thousand, six hundred'\n- 60,005 → 'sixty thousand, five'",
-      tryThis: "How would you read the number 83,420 out loud?"
+      title: "Expanded Form: Unpacking Numbers! 📦",
+      concept: "Expanded form shows the value of each digit individually, like opening a gift box!",
+      content: "It's like taking a number apart to see all its pieces. You can do it with addition or multiplication!",
+      bgColor: "#8A2BE2", // Blue violet
+      visual: "For 34,187:\nAddition: 30,000 + 4,000 + 100 + 80 + 7\nMultiplication: (3 × 10,000) + (4 × 1,000) + (1 × 100) + (8 × 10) + (7 × 1)\n\nIt's like showing each digit's individual contribution!",
+      example: "Write 56,243 in expanded form using addition.",
+      tryThis: "What is the expanded form of 98,706?"
     },
     {
       slideNumber: 7,
-      title: "Writing Numbers in Words ✍️",
-      concept: "From Digits to Words!",
-      content: "Just like we read numbers aloud, we can write them in words. Remember to use 'thousand' when you get past the hundreds place. Zeros are important placeholders!",
-      bgColor: "#FFB347", // Peach
-      visual: "Examples:\n53,082 → 'Fifty-three thousand, eighty-two'\n60,005 → 'Sixty thousand, five'\n17,345 → 'Seventeen thousand, three hundred forty-five'",
-      example: "Notice how we handle zeros:\n- In 60,005, we don't say 'zero hundred zero tens'\n- We just say 'sixty thousand, five'\n- The zeros hold the place but we don't read them",
-      tryThis: "Write the number 29,603 in words."
+      title: "The Amazing 'Times 10' Pattern! 💥",
+      concept: "Each place value is 10 times bigger than the place to its right!",
+      content: "When you move a digit one place to the left, its value multiplies by 10! Moving right, it divides by 10!",
+      bgColor: "#FF4500", // Orange red
+      visual: "Imagine stepping stones: 5 (ones) → 50 (tens) → 500 (hundreds) → 5,000 (thousands) → 50,000 (ten thousands). Each jump is a ×10!",
+      example: "If you have 3 in the hundreds place (300), and move it to the thousands place, what's its new value? (3,000)",
+      tryThis: "What happens to the value of the digit '2' in 24,000 if it moves to the hundreds place (200)?"
     },
     {
       slideNumber: 8,
-      title: "Standard Form vs. Word Form 🔢📝",
-      concept: "Numbers: Two Ways to Show Them!",
-      content: "We have two main ways to show numbers: Standard Form (using digits) and Word Form (using words). Both represent the same value!",
-      bgColor: "#87CEEB", // Sky blue
-      visual: "Standard Form → Word Form\n12,345 → Twelve thousand, three hundred forty-five\n8,050 → Eight thousand, fifty\n62,009 → Sixty-two thousand, nine",
-      example: "Practice matching:\nStandard: 75,308\nWord: Seventy-five thousand, three hundred eight\n\nBoth represent the same number!",
-      tryThis: "Convert 41,207 to word form, then back to standard form."
+      title: "Composing Numbers: Building Blocks Back! 🏗️",
+      concept: "Composing numbers means putting smaller parts together to make a bigger number!",
+      content: "It's like building your LEGO set back up after taking it apart! You're creating a whole from its values.",
+      bgColor: "#3CB371", // Medium sea green
+      visual: "You have 10,000 + 5,000 + 200 + 70 + 8. Put it together to get 15,278!",
+      example: "What number do you get if you compose 60,000 + 7,000 + 300 + 10 + 4?",
+      tryThis: "If you have 4 thousands, 8 hundreds, 2 tens, and 1 one, what number do you compose?"
     },
     {
       slideNumber: 9,
-      title: "Expanded Form: Stretching Numbers Out! ↔️",
-      concept: "See What Numbers Are Made Of!",
-      content: "Expanded form helps us see the value of each digit in a number. It's like stretching the number out to show all its parts added together!",
-      bgColor: "#98FB98", // Pale green
-      visual: "34,187 in Expanded Form:\n30,000 + 4,000 + 100 + 80 + 7\n\nEach part shows the value of each digit!",
-      example: "More examples:\n- 25,603 → 20,000 + 5,000 + 600 + 0 + 3\n- 50,079 → 50,000 + 0 + 0 + 70 + 9\n- 7,654 → 7,000 + 600 + 50 + 4",
-      tryThis: "Write 18,925 in expanded form using addition."
+      title: "Decomposing Numbers: Breaking Apart! 🧩",
+      concept: "Decomposing means breaking a big number into smaller, easier-to-handle pieces!",
+      content: "This helps us understand the total value and can be done in many ways, not just by place value!",
+      bgColor: "#BA55D3", // Medium orchid
+      visual: "53,125 can be:\n- 50,000 + 3,000 + 100 + 20 + 5 (by place value)\n- OR 53,000 + 125 (easier for some calculations)\n- OR 50,000 + 3,125",
+      example: "Decompose 67,892 into two different parts.",
+      tryThis: "How can you decompose the number 25,000 in two different ways (e.g., 20,000 + 5,000)?"
     },
     {
       slideNumber: 10,
-      title: "Expanded Form: The Multiplication Way! ✨",
-      concept: "Using Multiplication to Show Place Value!",
-      content: "There's another way to show expanded form using multiplication! We show each digit multiplied by its place value. This really shows how much each digit is worth.",
-      bgColor: "#F0E68C", // Khaki
-      visual: "34,187 in Multiplication Form:\n(3 × 10,000) + (4 × 1,000) + (1 × 100) + (8 × 10) + (7 × 1)\n\nThis shows exactly what each digit contributes!",
-      example: "More examples:\n- 7,654 → (7 × 1,000) + (6 × 100) + (5 × 10) + (4 × 1)\n- 50,308 → (5 × 10,000) + (0 × 1,000) + (3 × 100) + (0 × 10) + (8 × 1)",
-      tryThis: "Write 23,457 using the multiplication method."
+      title: "Numbers in the Real World! 🗺️",
+      concept: "Big numbers are everywhere, not just in math class! They tell us amazing things!",
+      content: "From populations to distances, money to scores, numbers help us understand our world!",
+      bgColor: "#A0522D", // Sienna
+      visual: "• Population of a city: 2,794,356\n• Distance to school: 12,500 meters\n• High score in a game: 99,999\n• Pages in a big book: 1,200",
+      example: "If a sports stadium holds 50,000 people, is that a big number?",
+      tryThis: "Detective Mission: Find a number bigger than 1,000 in your home today!"
     },
     {
       slideNumber: 11,
-      title: "Composing Numbers: Putting Them Together! 🧩",
-      concept: "Building Numbers from Parts!",
-      content: "Composing a number means putting smaller numbers together to make a bigger one. It's like building with number blocks!",
-      bgColor: "#DEB887", // Burlywood
-      visual: "Building 56,254:\n50,000 + 6,000 + 200 + 50 + 4 = 56,254\n\nEach piece adds up to make the whole!",
-      example: "Examples of composing:\n- 60,000 + 300 + 9 = 60,309\n- 70,000 + 5,000 + 80 + 2 = 75,082\n- 40,000 + 6,000 + 500 + 10 + 7 = 46,517",
-      tryThis: "What number do you get from 80,000 + 4,000 + 200 + 60 + 3?"
+      title: "Number Lines: Finding Homes for Numbers! 🏡",
+      concept: "Number lines show where numbers live and how far apart they are!",
+      content: "They help us visualize magnitude and proximity. 75,000 is closer to 100,000 than to 50,000!",
+      bgColor: "#5F9EA0", // Cadet blue
+      visual: "A line from 0 to 100,000 with marks at 25,000, 50,000, 75,000. Point to where 60,000 would be!",
+      example: "Where would 30,000 sit on our number line? Between which two main marks?",
+      tryThis: "Draw a simple number line from 0 to 10,000. Mark where 5,000 and 7,500 would be."
     },
     {
       slideNumber: 12,
-      title: "Decomposing Numbers: Breaking Them Apart! 💥",
-      concept: "Breaking Numbers into Smaller Parts!",
-      content: "Decomposing is the opposite of composing. It means breaking a number down into its smaller parts. This helps us understand numbers better!",
-      bgColor: "#F4A460", // Sandy brown
-      visual: "Decomposing 73,529:\n73,529 → 70,000 + 3,000 + 500 + 20 + 9\n\nOr even: 73,529 → 70,000 + 3,529",
-      example: "Different ways to decompose 48,062:\n- By place value: 40,000 + 8,000 + 0 + 60 + 2\n- Other ways: 48,000 + 62\n- Or: 45,000 + 3,062",
-      tryThis: "Decompose 67,834 into its place value parts."
+      title: "Comparing Number Giants! 🆚",
+      concept: "When comparing big numbers, start from the left (the biggest place value) and go right!",
+      content: "It's like judging a contest: look at the biggest, most important parts first!",
+      bgColor: "#8B0000", // Dark red
+      visual: "67,845 vs 68,234\n- Both have 6 in ten thousands.\n- Look at thousands: 7 vs 8. Since 8 > 7, then 68,234 is bigger!",
+      example: "Which is bigger: 45,321 or 45,678? (Hint: The hundreds place is different!)",
+      tryThis: "Compare 91,234 and 91,209. Which is larger and why?"
     },
     {
       slideNumber: 13,
-      title: "The Mighty Zero! 🦸‍♂️",
-      concept: "Zero: The Placeholder Hero!",
-      content: "The digit 0 is a real hero! It acts as a placeholder. Without zero, numbers would get all mixed up! It tells us when there are no groups of a certain place value.",
-      bgColor: "#20B2AA", // Light sea green
-      visual: "Zero in Action:\n60,345 vs 6,345\n\nThe zero in 60,345 means:\n- 6 ten thousands\n- 0 thousands\n- 3 hundreds\n- 4 tens\n- 5 ones",
-      example: "Examples of zero as placeholder:\n- 502 vs 52 (zero holds the tens place)\n- 30,067 vs 3,067 (zero holds the thousands place)\n- 80,000 vs 8,000 (zeros hold multiple places)",
-      tryThis: "What's the difference between 705 and 75? Which place does zero hold?"
+      title: "Mental Math Magic! 🧠",
+      concept: "Place value makes mental math a superpower! Break numbers apart to make them friendly!",
+      content: "Don't be scared of big numbers! Add or subtract their place values separately, then put them back together!",
+      bgColor: "#FF8C00", // Dark orange
+      visual: "34,000 + 25,000:\nThink: 34 thousands + 25 thousands = 59 thousands! So, 59,000!",
+      example: "What's 42,000 + 31,000? (Think: 42 + 31...)",
+      tryThis: "Try to mentally subtract 10,000 from 75,000. What's the answer?"
     },
     {
       slideNumber: 14,
-      title: "Numbers on a Line! 📏",
-      concept: "Finding Our Place on the Number Line!",
-      content: "A number line helps us see where numbers are and how they relate to each other. Each number has its own unique spot!",
-      bgColor: "#DA70D6", // Orchid
-      visual: "Number Line (0 to 100,000):\n0 -------- 25,000 -------- 50,000 -------- 75,000 -------- 100,000\n\n50,000 is right in the middle!\n80,000 is closer to 100,000 than to 0",
-      example: "Where would these numbers be?\n- 25,000: Halfway between 0 and 50,000\n- 75,000: Halfway between 50,000 and 100,000\n- 90,000: Very close to 100,000",
-      tryThis: "On a line from 0 to 10,000, where would 3,500 be?"
+      title: "Rounding: Making Numbers Friendly! 🤗",
+      concept: "Rounding helps us estimate and work with 'friendlier' numbers that are close to the original.",
+      content: "Rule: Look at the digit to the right of the place you're rounding to. 5 or more? Round up! 4 or less? Round down!",
+      bgColor: "#D2691E", // Chocolate
+      visual: "Number line: 67,341 is closer to 67,000 than 68,000. So, round to 67,000 (if rounding to the nearest thousand).",
+      example: "Round 23,678 to the nearest thousand. (Hint: Look at the hundreds digit!)",
+      tryThis: "Round 5,499 to the nearest thousand. Is it 5,000 or 6,000?"
     },
     {
       slideNumber: 15,
-      title: "Numbers in Our World! 🌎",
-      concept: "Big Numbers Are Everywhere!",
-      content: "Numbers up to 100,000 are all around us in real life! Let's see where we can find them.",
-      bgColor: "#32CD32", // Lime green
-      visual: "Where We See Big Numbers:\n🏙️ Town populations: 24,500 people\n🚗 Car odometers: 87,090 km\n💰 Expensive items: $25,000 car\n📱 Video views: 98,000 views\n🎮 Game scores: 75,000 points",
-      example: "Real examples:\n- Small city: 'Welcome to Riverside - Population: 45,000'\n- Used car: 'Only 62,000 miles!'\n- Popular video: '1.2M views' (that's 1,200,000!)",
-      tryThis: "Next time you're out, look for numbers bigger than 1,000. What are they describing?"
+      title: "Cultural Connections of Numbers! 🤝",
+      concept: "Numbers aren't just math; they have special meanings and traditions in different cultures!",
+      content: "From lucky numbers to counting systems, numbers connect us globally!",
+      bgColor: "#8B4513", // Saddle brown
+      visual: "• In China, '8' is lucky (sounds like prosperity).\n• In many cultures, '7' is considered lucky.\n• Some cultures have unique counting systems based on body parts or objects.",
+      example: "Can you think of a number that is special in your family or culture?",
+      tryThis: "Research a number that has cultural significance in a country different from your own."
     },
     {
       slideNumber: 16,
-      title: "You're a Number Whiz! 🧠💡",
-      concept: "Number Power Recap!",
-      content: "Wow, you've learned so much about whole numbers up to 100,000! You're becoming a place value expert!",
-      bgColor: "#FF69B4", // Hot pink
-      visual: "What You've Mastered:\n✓ Digits (0-9) build all numbers\n✓ Place value determines digit worth\n✓ Reading & writing in different forms\n✓ Expanded form shows number parts\n✓ Composing & decomposing numbers\n✓ Zero as the placeholder hero\n✓ Finding numbers in real life",
-      example: "You can now:\n- Read 'eighty-three thousand, four hundred seven'\n- Write 83,407 in expanded form\n- Understand that 90,000 > 9,000\n- Spot big numbers everywhere!",
-      tryThis: "Pat yourself on the back! You've got number power!"
+      title: "Number Patterns: The Repeating Melody! 🎶",
+      concept: "The place value pattern repeats every three places: ones-tens-hundreds, then thousands-ten thousands-hundred thousands!",
+      content: "Numbers are grouped into 'periods' of three digits. This makes reading huge numbers easier!",
+      bgColor: "#4B0082", // Indigo
+      visual: "Numbers like 456,789. The '456' is the thousands period. The '789' is the ones period.",
+      example: "In 123,456,789, what are the digits in the thousands period?",
+      tryThis: "Identify the 'ones period' and 'thousands period' in the number 98,765."
     },
     {
       slideNumber: 17,
-      title: "Practice Time! Test Your Skills! 🧩❓",
-      concept: "Challenge Yourself!",
-      content: "Let's see what you've learned! Try these practice questions to test your new number skills.",
-      bgColor: "#FF6347", // Tomato
-      visual: "Practice Questions:\n1. Write 67,034 in words\n2. Value of '8' in 98,215?\n3. Standard form of 'forty-two thousand, one hundred nine'\n4. Expanded form of 25,473\n5. Which is larger: 70,560 or 70,065?",
-      example: "Answers:\n1. Sixty-seven thousand, thirty-four\n2. 8,000 (eight thousand)\n3. 42,109\n4. 20,000 + 5,000 + 400 + 70 + 3\n5. 70,560 (has 5 hundreds vs 0 hundreds)",
-      tryThis: "Try creating your own practice questions for a friend!"
-    }
+      title: "You're a Number Explorer! 🎉",
+      concept: "You've gained the skills to understand, read, write, and work with numbers up to 100,000!",
+      content: "Now you can tackle any big number challenge! You're a true Number Explorer!",
+      bgColor: "#2E8B57", // Sea green
+      visual: "Congratulations! You can now:\n- Read numbers like 89,476\n- Write them in expanded form: 80,000 + 9,000 + 400 + 70 + 6\n- Identify place values: 8 (ten thousands), 9 (thousands), etc.",
+      example: "Pick any 5-digit number and be an explorer – break it down completely!",
+      tryThis: "Explain place value to a friend or family member using an example!"
+    },
+    {
+      slideNumber: 18,
+      title: "Final Challenge: Test Your Skills! 🏆",
+      concept: "Let's review your amazing Number Explorer skills!",
+      content: "You've learned digits, place value, reading, writing, composing, decomposing, comparing, rounding, and more!",
+      bgColor: "#800000", // Maroon
+      practice: [
+        'What is the value of the digit 7 in 47,823? a) 7 b) 70 c) 700 d) 7,000',
+        'Write 60,000 + 3,000 + 400 + 50 + 2 in standard form: a) 63,452 b) 60,3452',
+        'Which number is larger: 78,901 or 78,910? a) 78,901 b) 78,910',
+        'Round 45,678 to the nearest thousand: a) 45,000 b) 46,000',
+        'How do you read 50,307? a) Fifty thousand three hundred seven b) Five thousand three hundred seven'
+      ],
+      tryThis: 'Work through each practice question and check your answers!'
+    },
   ];
 
   const handleToggle = (aiType) => {
     setSelectedAI(aiType);
     if (onToggleAI) {
-      onToggleAI(aiType); // Call the prop function to inform parent
+      onToggleAI(aiType);
     }
   };
 
@@ -203,42 +229,44 @@ const GeminiLesson = ({ onToggleAI }) => {
     <div style={{
       minHeight: '100vh',
       width: '100vw',
-      background: `linear-gradient(135deg, ${currentSlide.bgColor} 0%, #EA4335 100%)`, // Mix with Google Red
+      background: 'linear-gradient(135deg, #FF6B6B 0%, #4285F4 100%)', // Gemini-like gradient (red to blue)
       display: 'flex',
       flexDirection: 'column',
       position: 'relative',
       padding: 0,
       margin: 0,
-      overflow: 'hidden'
+      overflowX: 'hidden', // Prevent horizontal scroll
     }}>
       {/* AI Toggle Section */}
       <div style={{
         position: 'absolute',
-        top: '20px',
+        top: isMobile ? '10px' : '20px', // Adjusted for mobile
         left: '50%',
         transform: 'translateX(-50%)',
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
         borderRadius: '25px',
-        padding: '6px',
+        padding: isMobile ? '2px' : '4px', // Adjusted for mobile
         display: 'flex',
         zIndex: 15,
-        boxShadow: '0 8px 25px rgba(0, 0, 0, 0.2)',
+        boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
         backdropFilter: 'blur(10px)',
-        border: '2px solid rgba(255, 255, 255, 0.3)'
+        width: isMobile ? '90%' : 'auto', // Occupy more width on mobile
+        justifyContent: 'center', // Center buttons on mobile
       }}>
         <button
           onClick={() => handleToggle('chatgpt')}
           style={{
-            padding: '10px 20px',
+            padding: isMobile ? '8px 12px' : '10px 20px', // Adjusted for mobile
             borderRadius: '20px',
             border: 'none',
             fontWeight: 'bold',
-            fontSize: '14px',
+            fontSize: isMobile ? '12px' : '14px', // Adjusted for mobile
             cursor: 'pointer',
             transition: 'all 0.3s ease',
-            backgroundColor: selectedAI === 'chatgpt' ? '#667eea' : 'transparent', // ChatGPT color
+            backgroundColor: selectedAI === 'chatgpt' ? '#667eea' : 'transparent',
             color: selectedAI === 'chatgpt' ? 'white' : '#667eea',
-            boxShadow: selectedAI === 'chatgpt' ? '0 2px 8px rgba(102, 126, 234, 0.3)' : 'none'
+            boxShadow: selectedAI === 'chatgpt' ? '0 2px 8px rgba(102, 126, 234, 0.3)' : 'none',
+            flex: isMobile ? 1 : 'none', // Make buttons take equal width on mobile
           }}
         >
           ChatGPT
@@ -246,16 +274,17 @@ const GeminiLesson = ({ onToggleAI }) => {
         <button
           onClick={() => handleToggle('claude')}
           style={{
-            padding: '10px 20px',
+            padding: isMobile ? '8px 12px' : '10px 20px', // Adjusted for mobile
             borderRadius: '20px',
             border: 'none',
             fontWeight: 'bold',
-            fontSize: '14px',
+            fontSize: isMobile ? '12px' : '14px', // Adjusted for mobile
             cursor: 'pointer',
             transition: 'all 0.3s ease',
-            backgroundColor: selectedAI === 'claude' ? '#FF6B6B' : 'transparent', // Claude color
+            backgroundColor: selectedAI === 'claude' ? '#FF6B6B' : 'transparent',
             color: selectedAI === 'claude' ? 'white' : '#FF6B6B',
-            boxShadow: selectedAI === 'claude' ? '0 2px 8px rgba(255, 107, 107, 0.3)' : 'none'
+            boxShadow: selectedAI === 'claude' ? '0 2px 8px rgba(255, 107, 107, 0.3)' : 'none',
+            flex: isMobile ? 1 : 'none', // Make buttons take equal width on mobile
           }}
         >
           Claude
@@ -263,26 +292,27 @@ const GeminiLesson = ({ onToggleAI }) => {
         <button
           onClick={() => handleToggle('gemini')}
           style={{
-            padding: '10px 20px',
+            padding: isMobile ? '8px 12px' : '10px 20px', // Adjusted for mobile
             borderRadius: '20px',
             border: 'none',
             fontWeight: 'bold',
-            fontSize: '14px',
+            fontSize: isMobile ? '12px' : '14px', // Adjusted for mobile
             cursor: 'pointer',
             transition: 'all 0.3s ease',
-            backgroundColor: selectedAI === 'gemini' ? '#4285F4' : 'transparent', // Gemini color
+            backgroundColor: selectedAI === 'gemini' ? '#4285F4' : 'transparent',
             color: selectedAI === 'gemini' ? 'white' : '#4285F4',
-            boxShadow: selectedAI === 'gemini' ? '0 2px 8px rgba(66, 133, 244, 0.3)' : 'none'
+            boxShadow: selectedAI === 'gemini' ? '0 2px 8px rgba(66, 133, 244, 0.3)' : 'none',
+            flex: isMobile ? 1 : 'none', // Make buttons take equal width on mobile
           }}
         >
           Gemini
         </button>
       </div>
 
-      {/* Gemini Prompt Label */}
+      {/* AI Prompt Label */}
       <div style={{
         position: 'absolute',
-        top: '20px',
+        top: isMobile ? '60px' : '20px', // Adjusted position for mobile
         right: '20px',
         backgroundColor: 'black',
         color: 'white',
@@ -290,157 +320,233 @@ const GeminiLesson = ({ onToggleAI }) => {
         borderRadius: '20px',
         fontSize: '14px',
         fontWeight: 'bold',
-        zIndex: 10
+        zIndex: 10,
+        display: isMobile && selectedAI === 'gemini' ? 'none' : 'block' // Hide on mobile if Gemini
       }}>
-        Gemini Prompt
+        {selectedAI === 'chatgpt' ? 'ChatGPT' : (selectedAI === 'claude' ? 'Claude' : 'Gemini')} Prompt
       </div>
 
-      {/* Main Content (similar to other components, with Gemini-specific content) */}
+      {/* Main Content */}
       <div style={{
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '40px',
-        textAlign: 'center'
+        padding: isMobile ? '10px' : '20px', // Smaller padding for mobile
+        paddingTop: isMobile ? '120px' : '20px', // Add more top padding on mobile to avoid overlap
+        textAlign: 'center',
+        overflowY: 'auto', // Allow scrolling if content overflows
       }}>
+        {/* Slide Card */}
         <div style={{
           backgroundColor: 'rgba(255, 255, 255, 0.95)',
           borderRadius: '20px',
-          padding: '60px',
-          maxWidth: '900px',
+          padding: isMobile ? '20px' : '40px', // Smaller padding for mobile
+          maxWidth: isMobile ? '95%' : '600px', // Use percentage for mobile width
           width: '100%',
           boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
           backdropFilter: 'blur(10px)',
-          border: `4px solid ${currentSlide.bgColor}`,
-          position: 'relative'
+          border: `4px solid ${currentSlide.bgColor || '#4285F4'}`, // Default border if bgColor missing
+          position: 'relative',
+          minHeight: isMobile ? 'calc(100vh - 180px)' : 'auto', // Ensure some height on mobile
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
         }}>
+
+          {/* Previous Button */}
+          <button
+            onClick={prevSlide}
+            disabled={currentSlideIndex === 0}
+            style={{
+              backgroundColor: currentSlideIndex === 0 ? '#ccc' : (currentSlide.bgColor || '#4285F4'),
+              color: 'white',
+              border: 'none',
+              width: isMobile ? '40px' : '50px', // Smaller button for mobile
+              height: isMobile ? '40px' : '50px', // Smaller button for mobile
+              borderRadius: '50%',
+              fontSize: isMobile ? '1.2rem' : '1.5rem', // Smaller font for mobile
+              cursor: currentSlideIndex === 0 ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease',
+              opacity: currentSlideIndex === 0 ? 0.5 : 1,
+              position: 'absolute',
+              top: '50%',
+              left: isMobile ? '5px' : '-25px', // Adjusted position for mobile
+              transform: 'translateY(-50%)',
+              zIndex: 20
+            }}
+            aria-label="Previous slide"
+          >
+            ←
+          </button>
+
+          {/* Next Button */}
+          <button
+            onClick={nextSlide}
+            disabled={currentSlideIndex === slidesData.length - 1}
+            style={{
+              backgroundColor: currentSlideIndex === slidesData.length - 1 ? '#ccc' : (currentSlide.bgColor || '#4285F4'),
+              color: 'white',
+              border: 'none',
+              width: isMobile ? '40px' : '50px', // Smaller button for mobile
+              height: isMobile ? '40px' : '50px', // Smaller button for mobile
+              borderRadius: '50%',
+              fontSize: isMobile ? '1.2rem' : '1.5rem', // Smaller font for mobile
+              cursor: currentSlideIndex === slidesData.length - 1 ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease',
+              opacity: currentSlideIndex === slidesData.length - 1 ? 0.5 : 1,
+              position: 'absolute',
+              top: '50%',
+              right: isMobile ? '5px' : '-25px', // Adjusted position for mobile
+              transform: 'translateY(-50%)',
+              zIndex: 20
+            }}
+            aria-label="Next slide"
+          >
+            →
+          </button>
+
+          {/* Slide Number */}
           <div style={{
             position: 'absolute',
-            top: '-15px',
-            left: '30px',
-            backgroundColor: currentSlide.bgColor,
+            top: isMobile ? '-10px' : '-15px', // Adjusted for mobile
+            left: isMobile ? '15px' : '30px', // Adjusted for mobile
+            backgroundColor: currentSlide.bgColor || '#4285F4',
             color: 'white',
-            padding: '8px 20px',
+            padding: isMobile ? '6px 15px' : '8px 20px', // Adjusted for mobile
             borderRadius: '15px',
-            fontSize: '16px',
+            fontSize: isMobile ? '14px' : '16px', // Adjusted for mobile
             fontWeight: 'bold'
           }}>
             Slide {currentSlide.slideNumber}
           </div>
+
+          {/* Title */}
           <h1 style={{
-            fontSize: '2.5rem',
-            color: currentSlide.bgColor,
+            fontSize: isMobile ? '1.8rem' : '3rem', // Smaller font for mobile
+            color: currentSlide.bgColor || '#4285F4',
             marginBottom: '20px',
             fontWeight: 'bold',
-            textShadow: '2px 2px 4px rgba(0,0,0,0.1)'
+            textShadow: '1px 1px 3px rgba(0,0,0,0.1)'
           }}>
             {currentSlide.title}
           </h1>
+
+          {/* Concept */}
           <div style={{
-            backgroundColor: `${currentSlide.bgColor}20`,
-            padding: '20px',
+            backgroundColor: `${currentSlide.bgColor ? currentSlide.bgColor + '20' : 'rgba(66,133,244,0.1)'}`,
+            padding: isMobile ? '15px' : '20px', // Smaller padding for mobile
             borderRadius: '15px',
             marginBottom: '30px',
-            border: `2px solid ${currentSlide.bgColor}40`
+            border: `2px solid ${currentSlide.bgColor ? currentSlide.bgColor + '40' : 'rgba(66,133,244,0.25)'}`
           }}>
             <h2 style={{
-              fontSize: '1.3rem',
-              color: currentSlide.bgColor,
+              fontSize: isMobile ? '1.2rem' : '1.5rem', // Smaller font for mobile
+              color: currentSlide.bgColor || '#4285F4',
               margin: '0',
               fontWeight: '600'
             }}>
-              📖 {currentSlide.concept}
+              {currentSlide.concept}
             </h2>
           </div>
+
+          {/* Content */}
           <div style={{
-            fontSize: '1.2rem',
+            fontSize: isMobile ? '1rem' : '1.3rem', // Smaller font for mobile
             color: '#333',
             lineHeight: '1.6',
             marginBottom: '25px',
-            fontStyle: 'italic'
           }}>
-            💬 "{currentSlide.content}"
+             {currentSlide.content}
           </div>
+
+          {/* Visual Example */}
           {currentSlide.visual && (
             <div style={{
-              backgroundColor: '#f0f8ff',
-              padding: '20px',
+              backgroundColor: '#F5F5F5',
+              padding: isMobile ? '15px' : '20px', // Smaller padding for mobile
               borderRadius: '10px',
               marginBottom: '25px',
-              fontSize: '1.1rem',
+              fontSize: isMobile ? '0.9rem' : '1.1rem', // Smaller font for mobile
               color: '#555',
-              fontFamily: 'monospace',
-              whiteSpace: 'pre-line',
-              border: '2px solid #87ceeb'
-            }}>
-              👀 Visual: {currentSlide.visual}
-            </div>
-          )}
-          {currentSlide.example && (
-            <div style={{
-              backgroundColor: '#e8f5e8',
-              padding: '20px',
-              borderRadius: '10px',
-              marginBottom: '25px',
-              fontSize: '1.1rem',
-              color: '#2d5a3d',
-              border: '2px solid #90c695',
+              fontFamily: 'serif',
               whiteSpace: 'pre-line'
             }}>
-              🌟 {currentSlide.example}
+              Visual: {currentSlide.visual}
             </div>
           )}
+
+          {/* Example */}
+          {currentSlide.example && (
+            <div style={{
+              backgroundColor: '#E0E0E0',
+              padding: isMobile ? '10px' : '15px', // Smaller padding for mobile
+              borderRadius: '10px',
+              marginBottom: '25px',
+              fontSize: isMobile ? '0.9rem' : '1.1rem', // Smaller font for mobile
+              color: '#444',
+              border: `2px solid ${currentSlide.bgColor ? currentSlide.bgColor + '30' : 'rgba(66,133,244,0.2)'}`,
+              whiteSpace: 'pre-line'
+            }}>
+              {currentSlide.example}
+            </div>
+          )}
+
+          {/* Try This */}
           <div style={{
-            backgroundColor: '#fff3cd',
-            padding: '20px',
+            backgroundColor: '#C8C8C8',
+            padding: isMobile ? '15px' : '20px', // Smaller padding for mobile
             borderRadius: '15px',
-            border: '2px solid #ffc107',
+            border: `2px solid ${currentSlide.bgColor || '#4285F4'}`,
             marginBottom: '20px'
           }}>
             <div style={{
-              fontSize: '1.2rem',
-              color: '#856404',
+              fontSize: isMobile ? '1.1rem' : '1.2rem', // Smaller font for mobile
+              color: '#222',
               fontWeight: 'bold'
             }}>
-              🎯 Try This: {currentSlide.tryThis}
+              {currentSlide.tryThis}
             </div>
+            {currentSlide.practice && (
+              <ul style={{
+                listStyle: 'none',
+                padding: 0,
+                marginTop: '10px',
+                textAlign: 'left',
+                fontSize: isMobile ? '0.9rem' : '1rem', // Smaller font for mobile
+              }}>
+                {currentSlide.practice.map((item, idx) => (
+                  <li key={idx} style={{ marginBottom: '5px' }}>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Navigation */}
+      {/* Navigation - Progress Indicator only */}
       <div style={{
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
-        padding: '30px 60px',
+        padding: '15px',
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(10px)'
+        backdropFilter: 'blur(10px)',
+        position: 'relative', // Ensure it stays at the bottom
+        bottom: 0,
+        width: '100%',
+        boxSizing: 'border-box', // Include padding in width
       }}>
-        <button
-          onClick={prevSlide}
-          disabled={currentSlideIndex === 0}
-          style={{
-            backgroundColor: currentSlideIndex === 0 ? '#ccc' : currentSlide.bgColor,
-            color: 'white',
-            border: 'none',
-            padding: '15px 30px',
-            borderRadius: '25px',
-            fontSize: '1.1rem',
-            fontWeight: 'bold',
-            cursor: currentSlideIndex === 0 ? 'not-allowed' : 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            transition: 'all 0.3s ease',
-            opacity: currentSlideIndex === 0 ? 0.5 : 1
-          }}
-        >
-          ← Previous
-        </button>
-
+        {/* Progress Indicator */}
         <div style={{
           display: 'flex',
           gap: '10px',
@@ -450,45 +556,23 @@ const GeminiLesson = ({ onToggleAI }) => {
             <div
               key={index}
               style={{
-                width: '12px',
-                height: '12px',
+                width: isMobile ? '8px' : '12px', // Smaller dots for mobile
+                height: isMobile ? '8px' : '12px', // Smaller dots for mobile
                 borderRadius: '50%',
-                backgroundColor: index === currentSlideIndex ? currentSlide.bgColor : 'rgba(255, 255, 255, 0.4)',
+                backgroundColor: index === currentSlideIndex ? (currentSlide.bgColor || '#4285F4') : 'rgba(255, 255, 255, 0.4)',
                 transition: 'all 0.3s ease'
               }}
             />
           ))}
           <span style={{
             color: 'white',
-            fontSize: '1.1rem',
+            fontSize: isMobile ? '0.9rem' : '1.1rem', // Smaller font for mobile
             fontWeight: 'bold',
-            marginLeft: '15px'
+            marginLeft: '10px', // Reduced margin for mobile
           }}>
             {currentSlideIndex + 1} / {slidesData.length}
           </span>
         </div>
-
-        <button
-          onClick={nextSlide}
-          disabled={currentSlideIndex === slidesData.length - 1}
-          style={{
-            backgroundColor: currentSlideIndex === slidesData.length - 1 ? '#ccc' : currentSlide.bgColor,
-            color: 'white',
-            border: 'none',
-            padding: '15px 30px',
-            borderRadius: '25px',
-            fontSize: '1.1rem',
-            fontWeight: 'bold',
-            cursor: currentSlideIndex === slidesData.length - 1 ? 'not-allowed' : 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            transition: 'all 0.3s ease',
-            opacity: currentSlideIndex === slidesData.length - 1 ? 0.5 : 1
-          }}
-        >
-          Next →
-        </button>
       </div>
     </div>
   );

@@ -1,12 +1,22 @@
 // C:/Users/HP/ui/src/pages/claude.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // Import useEffect for window resize
 
-const ClaudeLesson = ({ onToggleAI }) => { // Renamed from Lesson for clarity
+const ClaudeLesson = ({ onToggleAI }) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [selectedAI, setSelectedAI] = useState('claude'); // Start with Claude selected
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768); // State for mobile detection
+
+  // Update isMobile on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768); // Define your mobile breakpoint
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Test data for Claude slides
-const slidesData = [
+  const slidesData = [
     {
       slideNumber: 1,
       title: 'Welcome to Number Detective School!',
@@ -178,13 +188,11 @@ const slidesData = [
       tryThis: 'Work through each practice question step by step!',
       bgColor: '#059669',
     },
-  ]; 
-
-
+  ];
 
   const handleToggle = (aiType) => {
     setSelectedAI(aiType);
-    if (onToggleAI) { // Use onToggleAI to inform the parent
+    if (onToggleAI) {
       onToggleAI(aiType);
     }
   };
@@ -207,42 +215,44 @@ const slidesData = [
     <div style={{
       minHeight: '100vh',
       width: '100vw',
-      background: 'linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%)',
+      background: 'linear-gradient(135deg, #d4a373 0%, #a27b5c 100%)', // Claude-like gradient
       display: 'flex',
       flexDirection: 'column',
       position: 'relative',
       padding: 0,
       margin: 0,
-      overflow: 'hidden'
+      overflowX: 'hidden', // Prevent horizontal scroll
     }}>
       {/* AI Toggle Section */}
       <div style={{
         position: 'absolute',
-        top: '20px',
+        top: isMobile ? '10px' : '20px', // Adjusted for mobile
         left: '50%',
         transform: 'translateX(-50%)',
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
         borderRadius: '25px',
-        padding: '6px',
+        padding: isMobile ? '2px' : '4px', // Adjusted for mobile
         display: 'flex',
-        zIndex: 1000,
-        boxShadow: '0 8px 25px rgba(0, 0, 0, 0.2)',
+        zIndex: 15,
+        boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
         backdropFilter: 'blur(10px)',
-        border: '2px solid rgba(255, 255, 255, 0.3)'
+        width: isMobile ? '90%' : 'auto', // Occupy more width on mobile
+        justifyContent: 'center', // Center buttons on mobile
       }}>
         <button
           onClick={() => handleToggle('chatgpt')}
           style={{
-            padding: '10px 20px',
+            padding: isMobile ? '8px 12px' : '10px 20px', // Adjusted for mobile
             borderRadius: '20px',
             border: 'none',
             fontWeight: 'bold',
-            fontSize: '14px',
+            fontSize: isMobile ? '12px' : '14px', // Adjusted for mobile
             cursor: 'pointer',
             transition: 'all 0.3s ease',
-            backgroundColor: selectedAI === 'chatgpt' ? '#667eea' : 'transparent', // ChatGPT color
+            backgroundColor: selectedAI === 'chatgpt' ? '#667eea' : 'transparent',
             color: selectedAI === 'chatgpt' ? 'white' : '#667eea',
-            boxShadow: selectedAI === 'chatgpt' ? '0 2px 8px rgba(102, 126, 234, 0.3)' : 'none'
+            boxShadow: selectedAI === 'chatgpt' ? '0 2px 8px rgba(102, 126, 234, 0.3)' : 'none',
+            flex: isMobile ? 1 : 'none', // Make buttons take equal width on mobile
           }}
         >
           ChatGPT
@@ -250,16 +260,17 @@ const slidesData = [
         <button
           onClick={() => handleToggle('claude')}
           style={{
-            padding: '10px 20px',
+            padding: isMobile ? '8px 12px' : '10px 20px', // Adjusted for mobile
             borderRadius: '20px',
             border: 'none',
             fontWeight: 'bold',
-            fontSize: '14px',
+            fontSize: isMobile ? '12px' : '14px', // Adjusted for mobile
             cursor: 'pointer',
             transition: 'all 0.3s ease',
-            backgroundColor: selectedAI === 'claude' ? '#FF6B6B' : 'transparent',
+            backgroundColor: selectedAI === 'claude' ? '#FF6B6B' : 'transparent', // Claude specific color
             color: selectedAI === 'claude' ? 'white' : '#FF6B6B',
-            boxShadow: selectedAI === 'claude' ? '0 2px 8px rgba(255, 107, 107, 0.3)' : 'none'
+            boxShadow: selectedAI === 'claude' ? '0 2px 8px rgba(255, 107, 107, 0.3)' : 'none',
+            flex: isMobile ? 1 : 'none', // Make buttons take equal width on mobile
           }}
         >
           Claude
@@ -267,26 +278,27 @@ const slidesData = [
         <button
           onClick={() => handleToggle('gemini')}
           style={{
-            padding: '10px 20px',
+            padding: isMobile ? '8px 12px' : '10px 20px', // Adjusted for mobile
             borderRadius: '20px',
             border: 'none',
             fontWeight: 'bold',
-            fontSize: '14px',
+            fontSize: isMobile ? '12px' : '14px', // Adjusted for mobile
             cursor: 'pointer',
             transition: 'all 0.3s ease',
-            backgroundColor: selectedAI === 'gemini' ? '#4285F4' : 'transparent', // Gemini color
+            backgroundColor: selectedAI === 'gemini' ? '#4285F4' : 'transparent',
             color: selectedAI === 'gemini' ? 'white' : '#4285F4',
-            boxShadow: selectedAI === 'gemini' ? '0 2px 8px rgba(66, 133, 244, 0.3)' : 'none'
+            boxShadow: selectedAI === 'gemini' ? '0 2px 8px rgba(66, 133, 244, 0.3)' : 'none',
+            flex: isMobile ? 1 : 'none', // Make buttons take equal width on mobile
           }}
         >
           Gemini
         </button>
       </div>
 
-      {/* Claude Label */}
+      {/* AI Prompt Label */}
       <div style={{
         position: 'absolute',
-        top: '20px',
+        top: isMobile ? '60px' : '20px', // Adjusted position for mobile
         right: '20px',
         backgroundColor: 'black',
         color: 'white',
@@ -294,7 +306,8 @@ const slidesData = [
         borderRadius: '20px',
         fontSize: '14px',
         fontWeight: 'bold',
-        zIndex: 10
+        zIndex: 10,
+        display: isMobile && selectedAI === 'claude' ? 'none' : 'block' // Hide on mobile if Claude
       }}>
         {selectedAI === 'chatgpt' ? 'ChatGPT' : (selectedAI === 'claude' ? 'Claude' : 'Gemini')} Prompt
       </div>
@@ -306,31 +319,96 @@ const slidesData = [
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '40px',
-        textAlign: 'center'
+        padding: isMobile ? '10px' : '20px', // Smaller padding for mobile
+        paddingTop: isMobile ? '120px' : '20px', // Add more top padding on mobile to avoid overlap
+        textAlign: 'center',
+        overflowY: 'auto', // Allow scrolling if content overflows
       }}>
         {/* Slide Card */}
         <div style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          backgroundColor: 'rgba(255, 250, 245, 0.95)', // Slightly warmer white for Claude
           borderRadius: '20px',
-          padding: '60px',
-          maxWidth: '900px',
+          padding: isMobile ? '20px' : '40px', // Smaller padding for mobile
+          maxWidth: isMobile ? '95%' : '600px', // Use percentage for mobile width
           width: '100%',
           boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
           backdropFilter: 'blur(10px)',
-          border: `4px solid ${currentSlide.bgColor}`,
-          position: 'relative'
+          border: `4px solid ${currentSlide.bgColor || '#A27B5C'}`, // Default border if bgColor missing
+          position: 'relative',
+          minHeight: isMobile ? 'calc(100vh - 180px)' : 'auto', // Ensure some height on mobile
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
         }}>
+
+          {/* Previous Button */}
+          <button
+            onClick={prevSlide}
+            disabled={currentSlideIndex === 0}
+            style={{
+              backgroundColor: currentSlideIndex === 0 ? '#ccc' : (currentSlide.bgColor || '#A27B5C'),
+              color: 'white',
+              border: 'none',
+              width: isMobile ? '40px' : '50px', // Smaller button for mobile
+              height: isMobile ? '40px' : '50px', // Smaller button for mobile
+              borderRadius: '50%',
+              fontSize: isMobile ? '1.2rem' : '1.5rem', // Smaller font for mobile
+              cursor: currentSlideIndex === 0 ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease',
+              opacity: currentSlideIndex === 0 ? 0.5 : 1,
+              position: 'absolute',
+              top: '50%',
+              left: isMobile ? '5px' : '-25px', // Adjusted position for mobile
+              transform: 'translateY(-50%)',
+              zIndex: 20
+            }}
+            aria-label="Previous slide"
+          >
+            ←
+          </button>
+
+          {/* Next Button */}
+          <button
+            onClick={nextSlide}
+            disabled={currentSlideIndex === slidesData.length - 1}
+            style={{
+              backgroundColor: currentSlideIndex === slidesData.length - 1 ? '#ccc' : (currentSlide.bgColor || '#A27B5C'),
+              color: 'white',
+              border: 'none',
+              width: isMobile ? '40px' : '50px', // Smaller button for mobile
+              height: isMobile ? '40px' : '50px', // Smaller button for mobile
+              borderRadius: '50%',
+              fontSize: isMobile ? '1.2rem' : '1.5rem', // Smaller font for mobile
+              cursor: currentSlideIndex === slidesData.length - 1 ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease',
+              opacity: currentSlideIndex === slidesData.length - 1 ? 0.5 : 1,
+              position: 'absolute',
+              top: '50%',
+              right: isMobile ? '5px' : '-25px', // Adjusted position for mobile
+              transform: 'translateY(-50%)',
+              zIndex: 20
+            }}
+            aria-label="Next slide"
+          >
+            →
+          </button>
+
           {/* Slide Number */}
           <div style={{
             position: 'absolute',
-            top: '-15px',
-            left: '30px',
-            backgroundColor: currentSlide.bgColor,
+            top: isMobile ? '-10px' : '-15px', // Adjusted for mobile
+            left: isMobile ? '15px' : '30px', // Adjusted for mobile
+            backgroundColor: currentSlide.bgColor || '#A27B5C',
             color: 'white',
-            padding: '8px 20px',
+            padding: isMobile ? '6px 15px' : '8px 20px', // Adjusted for mobile
             borderRadius: '15px',
-            fontSize: '16px',
+            fontSize: isMobile ? '14px' : '16px', // Adjusted for mobile
             fontWeight: 'bold'
           }}>
             Slide {currentSlide.slideNumber}
@@ -338,151 +416,122 @@ const slidesData = [
 
           {/* Title */}
           <h1 style={{
-            fontSize: '2.5rem',
-            color: currentSlide.bgColor,
+            fontSize: isMobile ? '1.8rem' : '3rem', // Smaller font for mobile
+            color: currentSlide.bgColor || '#A27B5C',
             marginBottom: '20px',
             fontWeight: 'bold',
-            textShadow: '2px 2px 4px rgba(0,0,0,0.1)'
+            textShadow: '1px 1px 3px rgba(0,0,0,0.1)'
           }}>
             {currentSlide.title}
           </h1>
 
           {/* Concept */}
           <div style={{
-            backgroundColor: `${currentSlide.bgColor}20`,
-            padding: '20px',
+            backgroundColor: `${currentSlide.bgColor ? currentSlide.bgColor + '20' : 'rgba(162,123,92,0.1)'}`,
+            padding: isMobile ? '15px' : '20px', // Smaller padding for mobile
             borderRadius: '15px',
             marginBottom: '30px',
-            border: `2px solid ${currentSlide.bgColor}40`
+            border: `2px solid ${currentSlide.bgColor ? currentSlide.bgColor + '40' : 'rgba(162,123,92,0.25)'}`
           }}>
             <h2 style={{
-              fontSize: '1.3rem',
-              color: currentSlide.bgColor,
+              fontSize: isMobile ? '1.2rem' : '1.5rem', // Smaller font for mobile
+              color: currentSlide.bgColor || '#A27B5C',
               margin: '0',
               fontWeight: '600'
             }}>
-              📖 {currentSlide.concept}
+              {currentSlide.concept}
             </h2>
           </div>
 
           {/* Content */}
           <div style={{
-            fontSize: '1.2rem',
-            color: '#333',
+            fontSize: isMobile ? '1rem' : '1.3rem', // Smaller font for mobile
+            color: '#4A3B31',
             lineHeight: '1.6',
             marginBottom: '25px',
-            fontStyle: 'italic'
           }}>
-            💬 "{currentSlide.content}"
+             {currentSlide.content}
           </div>
 
           {/* Visual Example */}
           {currentSlide.visual && (
             <div style={{
-              backgroundColor: '#f0f8ff',
-              padding: '20px',
+              backgroundColor: '#FDF5EF',
+              padding: isMobile ? '15px' : '20px', // Smaller padding for mobile
               borderRadius: '10px',
               marginBottom: '25px',
-              fontSize: '1.1rem',
-              color: '#555',
-              fontFamily: 'monospace',
-              whiteSpace: 'pre-line',
-              border: '2px solid #87ceeb'
+              fontSize: isMobile ? '0.9rem' : '1.1rem', // Smaller font for mobile
+              color: '#5D4037',
+              fontFamily: 'serif',
+              whiteSpace: 'pre-line'
             }}>
-              👀 Visual: {currentSlide.visual}
+              Visual: {currentSlide.visual}
             </div>
           )}
 
           {/* Example */}
           {currentSlide.example && (
             <div style={{
-              backgroundColor: '#e8f5e8',
-              padding: '20px',
+              backgroundColor: '#EFEBE9',
+              padding: isMobile ? '10px' : '15px', // Smaller padding for mobile
               borderRadius: '10px',
               marginBottom: '25px',
-              fontSize: '1.1rem',
-              color: '#2d5a3d',
-              border: '2px solid #90c695',
+              fontSize: isMobile ? '0.9rem' : '1.1rem', // Smaller font for mobile
+              color: '#3E2723',
+              border: `2px solid ${currentSlide.bgColor ? currentSlide.bgColor + '30' : 'rgba(162,123,92,0.2)'}`,
               whiteSpace: 'pre-line'
             }}>
-              🌟 {currentSlide.example}
-            </div>
-          )}
-
-          {/* Practice Questions for Slide 18 */}
-          {currentSlide.practice && (
-            <div style={{
-              backgroundColor: '#fff9e6',
-              padding: '20px',
-              borderRadius: '10px',
-              marginBottom: '25px',
-              border: '2px solid #ffd700'
-            }}>
-              <h3 style={{ color: '#b8860b', marginBottom: '15px' }}>🎯 Practice Questions:</h3>
-              {currentSlide.practice.map((question, index) => (
-                <div key={index} style={{
-                  fontSize: '1rem',
-                  color: '#8b4513',
-                  marginBottom: '10px',
-                  textAlign: 'left'
-                }}>
-                  {index + 1}. {question}
-                </div>
-              ))}
+              {currentSlide.example}
             </div>
           )}
 
           {/* Try This */}
           <div style={{
-            backgroundColor: '#fff3cd',
-            padding: '20px',
+            backgroundColor: '#D7CCC8',
+            padding: isMobile ? '15px' : '20px', // Smaller padding for mobile
             borderRadius: '15px',
-            border: '2px solid #ffc107',
+            border: `2px solid ${currentSlide.bgColor || '#A27B5C'}`,
             marginBottom: '20px'
           }}>
             <div style={{
-              fontSize: '1.2rem',
-              color: '#856404',
+              fontSize: isMobile ? '1.1rem' : '1.2rem', // Smaller font for mobile
+              color: '#260F08',
               fontWeight: 'bold'
             }}>
-              🎯 Try This: {currentSlide.tryThis}
+              {currentSlide.tryThis}
             </div>
+            {currentSlide.practice && (
+              <ul style={{
+                listStyle: 'none',
+                padding: 0,
+                marginTop: '10px',
+                textAlign: 'left',
+                fontSize: isMobile ? '0.9rem' : '1rem', // Smaller font for mobile
+              }}>
+                {currentSlide.practice.map((item, idx) => (
+                  <li key={idx} style={{ marginBottom: '5px' }}>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Navigation */}
+      {/* Navigation - Progress Indicator only */}
       <div style={{
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
-        padding: '30px 60px',
+        padding: '15px',
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(10px)'
+        backdropFilter: 'blur(10px)',
+        position: 'relative', // Ensure it stays at the bottom
+        bottom: 0,
+        width: '100%',
+        boxSizing: 'border-box', // Include padding in width
       }}>
-        {/* Previous Button */}
-        <button
-          onClick={prevSlide}
-          disabled={currentSlideIndex === 0}
-          style={{
-            backgroundColor: currentSlideIndex === 0 ? '#ccc' : currentSlide.bgColor,
-            color: 'white',
-            border: 'none',
-            padding: '15px 30px',
-            borderRadius: '25px',
-            fontSize: '1.1rem',
-            fontWeight: 'bold',
-            cursor: currentSlideIndex === 0 ? 'not-allowed' : 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            transition: 'all 0.3s ease',
-            opacity: currentSlideIndex === 0 ? 0.5 : 1
-          }}
-        >
-          ← Previous
-        </button>
-
         {/* Progress Indicator */}
         <div style={{
           display: 'flex',
@@ -493,46 +542,23 @@ const slidesData = [
             <div
               key={index}
               style={{
-                width: '12px',
-                height: '12px',
+                width: isMobile ? '8px' : '12px', // Smaller dots for mobile
+                height: isMobile ? '8px' : '12px', // Smaller dots for mobile
                 borderRadius: '50%',
-                backgroundColor: index === currentSlideIndex ? currentSlide.bgColor : 'rgba(255, 255, 255, 0.4)',
+                backgroundColor: index === currentSlideIndex ? (currentSlide.bgColor || '#A27B5C') : 'rgba(255, 255, 255, 0.4)',
                 transition: 'all 0.3s ease'
               }}
             />
           ))}
           <span style={{
             color: 'white',
-            fontSize: '1.1rem',
+            fontSize: isMobile ? '0.9rem' : '1.1rem', // Smaller font for mobile
             fontWeight: 'bold',
-            marginLeft: '15px'
+            marginLeft: '10px', // Reduced margin for mobile
           }}>
             {currentSlideIndex + 1} / {slidesData.length}
           </span>
         </div>
-
-        {/* Next Button */}
-        <button
-          onClick={nextSlide}
-          disabled={currentSlideIndex === slidesData.length - 1}
-          style={{
-            backgroundColor: currentSlideIndex === slidesData.length - 1 ? '#ccc' : currentSlide.bgColor,
-            color: 'white',
-            border: 'none',
-            padding: '15px 30px',
-            borderRadius: '25px',
-            fontSize: '1.1rem',
-            fontWeight: 'bold',
-            cursor: currentSlideIndex === slidesData.length - 1 ? 'not-allowed' : 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            transition: 'all 0.3s ease',
-            opacity: currentSlideIndex === slidesData.length - 1 ? 0.5 : 1
-          }}
-        >
-          Next →
-        </button>
       </div>
     </div>
   );
