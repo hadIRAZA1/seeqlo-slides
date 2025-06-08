@@ -1,562 +1,378 @@
-// C:/Users/HP/ui/src/pages/claude.jsx
-import React, { useState, useEffect } from 'react'; // Import useEffect for window resize
+import React, { useState, useEffect } from 'react';
 
-const ClaudeLesson = ({ onToggleAI }) => {
+const ClaudeLesson = ({ onToggleAI, onSelectPrompt }) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-  const [selectedAI, setSelectedAI] = useState('claude'); // Start with Claude selected
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768); // State for mobile detection
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  // Update isMobile on window resize
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768); // Define your mobile breakpoint
+      setIsMobile(window.innerWidth < 768);
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Test data for Claude slides
-  const slidesData = [
-    {
-      slideNumber: 1,
-      title: 'Welcome to Number Detective School!',
-      concept: 'Numbers up to 100,000 are all around us and each digit has a special job!',
-      content: "Every digit is a clue, and every position tells us something important!",
-      visual: 'Big number 87,245 displayed like a detective case file with magnifying glass',
-      tryThis: 'Look around your classroom - can you spot any numbers bigger than 1,000?',
-      bgColor: '#4F46E5',
-    },
-    {
-      slideNumber: 2,
-      title: 'Meet the Building Blocks - Digits!',
-      concept: 'All numbers are made from just 10 digits: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9',
-      content: 'Just like the 26 letters make all words, these 10 digits make ALL numbers!',
-      visual: 'The 10 digits arranged like colorful building blocks, with arrows showing how they combine to make 45,107',
-      tryThis: 'In the number 45,107, count how many different digits you see. (Answer: 5 digits!)',
-      bgColor: '#059669',
-    },
-    {
-      slideNumber: 3,
-      title: 'The Magic of Place Value!',
-      concept: 'Each place in a number has a special value - like each seat in a theater has a different view!',
-      content: 'The 4 in 45,107 isn\'t worth 4 - it\'s worth 40,000 because of WHERE it sits!',
-      visual: 'Place value chart showing 45,107 with columns:\nTen Thousands | Thousands | Hundreds | Tens | Ones\n      4       |     5     |    1     |  0   |  7',
-      tryThis: 'What\'s the value of the digit 5 in 45,107? (Hint: It\'s in the thousands place!)',
-      bgColor: '#DC2626',
-    },
-    {
-      slideNumber: 4,
-      title: 'Reading Big Numbers Like a Story!',
-      concept: 'Reading big numbers follows a pattern - listen for the word "thousand"',
-      content: 'The comma helps us see where "thousands" ends and regular numbers begin',
-      example: 'Number 78,037 = "seventy-eight thousand thirty-seven"',
-      tryThis: 'How would you read 92,456 out loud? Practice saying it: "ninety-two thousand four hundred fifty-six"',
-      bgColor: '#7C3AED',
-    },
-    {
-      slideNumber: 5,
-      title: 'Zero - The Superhero Placeholder!',
-      concept: 'Zero might look like nothing, but it\'s a powerful placeholder that keeps other digits in the right spot',
-      content: 'Without zero, we couldn\'t tell the difference between 45 and 405! 🦸',
-      example: 'Compare: 189 vs 1,089 - see how zero changes everything!',
-      tryThis: 'What happens if we remove the zero from 20,304? We\'d get 2,034 - a completely different number!',
-      bgColor: '#EA580C',
-    },
-    {
-      slideNumber: 6,
-      title: 'Breaking Numbers Apart - Expanded Form!',
-      concept: 'Expanded form shows the value of each digit separately, like taking apart a puzzle',
-      content: 'Two ways to show expanded form:',
-      example: 'Addition way: 30,000 + 4,000 + 100 + 80 + 7\nMultiplication way: 3×10,000 + 4×1,000 + 1×100 + 8×10 + 7×1',
-      visual: 'Number 34,187 "exploding" into: 30,000 + 4,000 + 100 + 80 + 7',
-      tryThis: 'Write 56,243 in expanded form using addition!',
-      bgColor: '#0891B2',
-    },
-    {
-      slideNumber: 7,
-      title: 'The Amazing Times 10 Pattern!',
-      concept: 'Each place value is 10 times bigger than the place to its right',
-      content: 'Moving left = ×10, Moving right = ÷10',
-      visual: 'Stepping stones showing: 5 → 50 → 500 → 5,000 → 50,000 (each step ×10)',
-      tryThis: 'If 3 is in the hundreds place (300), what happens when it moves to the thousands place?',
-      bgColor: '#BE185D',
-    },
-    {
-      slideNumber: 8,
-      title: 'Building Numbers - Composition!',
-      concept: 'Composing means putting smaller numbers together to make bigger ones',
-      content: 'We can make numbers in many different ways!',
-      example: 'We can make 1,500 by: 1,000 + 500, OR 15 × 100, OR 1,499 + 1',
-      visual: 'Number blocks showing 100 + 2 = 102, and 100 × 2 = 200',
-      tryThis: 'How many ways can you make 2,000? (Hint: 1,000 + 1,000 is just one way!)',
-      bgColor: '#059669',
-    },
-    {
-      slideNumber: 9,
-      title: 'Taking Numbers Apart - Decomposition!',
-      concept: 'Decomposing breaks big numbers into smaller, easier pieces',
-      content: 'Numbers can be broken apart in multiple ways, like opening a present! 🎁',
-      example: '53,125 = 50,000 + 3,000 + 100 + 20 + 5\nOR 53,125 = 50,000 + 3,125\nOR 53,125 = 53,000 + 125',
-      tryThis: 'Decompose 67,892 in two different ways!',
-      bgColor: '#7C2D12',
-    },
-    {
-      slideNumber: 10,
-      title: 'Numbers in Our World!',
-      concept: 'Big numbers aren\'t just for math - they\'re everywhere in real life!',
-      content: 'Numbers are all around us in the real world!',
-      example: '• Toronto population: 2,794,356 people\n• Your daily steps: 12,500 steps\n• School library books: 15,847 books\n• Video game high score: 99,999 points',
-      tryThis: 'Detective Mission: Tonight, find 3 numbers larger than 1,000 in your home!',
-      bgColor: '#166534',
-    },
-    {
-      slideNumber: 11,
-      title: 'Number Lines - Where Numbers Live!',
-      concept: 'Number lines show us where numbers live and how they relate to each other',
-      content: '75,000 is closer to 100,000 than to 50,000 - we can see this on the number line!',
-      visual: 'Horizontal line from 0 to 100,000 with marks at 25,000, 50,000, 75,000',
-      tryThis: 'Where would 30,000 sit on our number line? Between which two marks?',
-      bgColor: '#991B1B',
-    },
-    {
-      slideNumber: 12,
-      title: 'Comparing Number Giants!',
-      concept: 'When comparing big numbers, start from the left (biggest place value) and work right',
-      content: 'Comparison Trick: Look at the biggest place values first!',
-      example: '67,845 vs 68,234\n6 = 6 (ten thousands), but 8 > 7 (thousands), so 68,234 wins! ⚖️',
-      tryThis: 'Which is bigger: 45,321 or 45,678? Look at the hundreds place for your answer!',
-      bgColor: '#5B21B6',
-    },
-    {
-      slideNumber: 13,
-      title: 'Mental Math Magic!',
-      concept: 'Place value makes mental math easier - break numbers apart!',
-      content: 'Brain Trick: Instead of adding big numbers, add the smaller parts and rebuild! 🧠',
-      example: '34,000 + 25,000 = "34 thousands + 25 thousands = 59 thousands"',
-      tryThis: 'What\'s 42,000 + 31,000? Think: 42 + 31 = 73, so 73,000!',
-      bgColor: '#0F766E',
-    },
-    {
-      slideNumber: 14,
-      title: 'Rounding to Make Friends!',
-      concept: 'Rounding helps us work with friendlier numbers that are close to the original',
-      content: 'Rounding Rules: Look at the digit to the right. If it\'s 5 or more, round up. If it\'s 4 or less, round down.',
-      example: 'Number line showing 67,341 is closer to 67,000 than 68,000',
-      tryThis: 'Round 23,678 to the nearest thousand. Is it closer to 23,000 or 24,000?',
-      bgColor: '#C2410C',
-    },
-    {
-      slideNumber: 15,
-      title: 'Cultural Connections!',
-      concept: 'Numbers can have special meanings in different cultures around the world',
-      content: 'Numbers connect us to cultures and traditions! 🌍',
-      example: '• Chinese culture: 8 is lucky (sounds like "prosperity")\n• Many cultures: 7 is lucky\n• Sports: Jersey numbers have special meaning\n• Indigenous cultures have unique counting systems',
-      tryThis: 'Ask family members if any numbers are special in your family\'s culture!',
-      bgColor: '#7E22CE',
-    },
-    {
-      slideNumber: 16,
-      title: 'Number Patterns Everywhere!',
-      concept: 'The place value pattern repeats: ones-tens-hundreds, then thousands-ten thousands-hundred thousands',
-      content: 'Pattern blocks show how hundreds-tens-ones repeats in each "period"',
-      example: 'Period Names: Ones period, Thousands period, Millions period (and beyond!)',
-      tryThis: 'In 456,789, identify the ones period (789) and thousands period (456)!',
-      bgColor: '#BE123C',
-    },
-    {
-      slideNumber: 17,
-      title: 'Putting It All Together!',
-      concept: 'You\'re now a Place Value Detective! Let\'s solve the mystery of 89,476',
-      content: 'Graduation: You can now decode ANY number up to 100,000! 🎓',
-      example: 'Detective breakdown of 89,476:\n• Read: "eighty-nine thousand four hundred seventy-six"\n• Expanded: 80,000 + 9,000 + 400 + 70 + 6\n• Place values: 8 (ten thousands), 9 (thousands), 4 (hundreds), 7 (tens), 6 (ones)',
-      tryThis: 'Pick any 5-digit number and be a detective - break it down completely!',
-      bgColor: '#0369A1',
-    },
-    {
-      slideNumber: 18,
-      title: 'Quick Review Challenge!',
-      concept: 'You\'ve learned about digits, place value, reading, writing, composing, decomposing, and comparing big numbers!',
-      content: 'Master Detective Skills: 🏆',
-      example: '• Every digit has a place and value\n• Zero is a powerful placeholder\n• Patterns help us understand big numbers\n• Numbers are everywhere in our world!',
-      practice: [
-        'What is the value of the digit 7 in 47,823? a) 7 b) 70 c) 700 d) 7,000',
-        'Write 60,000 + 3,000 + 400 + 50 + 2 in standard form: a) 63,452 b) 60,3452',
-        'Which number is larger: 78,901 or 78,910? a) 78,901 b) 78,910',
-        'Round 45,678 to the nearest thousand: a) 45,000 b) 46,000',
-        'How do you read 50,307? a) Fifty thousand three hundred seven b) Five thousand three hundred seven'
-      ],
-      tryThis: 'Work through each practice question step by step!',
-      bgColor: '#059669',
-    },
-  ];
 
-  const handleToggle = (aiType) => {
-    setSelectedAI(aiType);
-    if (onToggleAI) {
-      onToggleAI(aiType);
-    }
-  };
+const slidesData = [
+  {
+    slideNumber: 1,
+    title: 'Welcome to Number Detective School!',
+    concept: 'Numbers up to 100,000 are all around us and each digit has a special job!',
+    Idea: 'Big number 87,245 displayed like a detective case file with magnifying glass',
+    sayIt: 'Every digit is a clue, and every position tells us something important!',
+    tryThis: 'Look around your classroom - can you spot any numbers bigger than 1,000?',
+    bgColor: '#0D9488'
+  },
+  {
+    slideNumber: 2,
+    title: 'Meet the Building Blocks - Digits!',
+    concept: 'All numbers are made from just 10 digits: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9',
+    Idea: 'The 10 digits arranged like colorful building blocks, with arrows showing how they combine to make 45,107',
+    realLife: 'Just like the 26 letters make all words, these 10 digits make ALL numbers!',
+    tryThis: 'In the number 45,107, count how many different digits you see. (Answer: 5 digits!)',
+    bgColor: '#BE123C'
+  },
+  {
+    slideNumber: 3,
+    title: 'The Magic of Place Value!',
+    concept: 'Each place in a number has a special value - like each seat in a theater has a different view!',
+    Idea: 'Place value chart showing 45,107 with columns labeled: Ten Thousands | Thousands | Hundreds | Tens | Ones',
+    sayIt: "The 4 in 45,107 isn't worth 4 - it's worth 40,000 because of WHERE it sits!",
+    tryThis: "What's the value of the digit 5 in 45,107? (Hint: It's in the thousands place!)",
+    bgColor: '#7C3AED'
+  },
+  {
+    slideNumber: 4,
+    title: 'Reading Big Numbers Like a Story!',
+    concept: 'Reading big numbers follows a pattern - listen for the word "thousand"',
+    Idea: 'Number 78,037 with speech bubble showing "seventy-eight thousand thirty-seven"',
+    tip: 'The comma helps us see where "thousands" ends and regular numbers begin',
+    tryThis: 'How would you read 92,456 out loud? Practice saying it: "ninety-two thousand four hundred fifty-six"',
+    bgColor: '#EA580C'
+  },
+  {
+    slideNumber: 5,
+    title: 'Zero - The Superhero Placeholder!',
+    concept: "Zero might look like nothing, but it's a powerful placeholder that keeps other digits in the right spot",
+    Idea: 'Compare 189 vs 1,089 in two columns showing how zero changes everything',
+    fact: "Without zero, we couldn't tell the difference between 45 and 405!",
+    tryThis: "What happens if we remove the zero from 20,304? We'd get 2,034 - a completely different number!",
+    bgColor: '#059669'
+  },
+  {
+    slideNumber: 6,
+    title: 'Breaking Numbers Apart - Expanded Form!',
+    concept: 'Expanded form shows the value of each digit separately, like taking apart a puzzle',
+    Idea: 'Number 34,187 "exploding" into: 30,000 + 4,000 + 100 + 80 + 7',
+    ways: {
+      addition: '30,000 + 4,000 + 100 + 80 + 7',
+      multiplication: '3×10,000 + 4×1,000 + 1×100 + 8×10 + 7×1'
+    },
+    tryThis: 'Write 56,243 in expanded form using addition!',
+    bgColor: '#5B21B6'
+  },
+  {
+    slideNumber: 7,
+    title: 'The Amazing Times 10 Pattern!',
+    concept: 'Each place value is 10 times bigger than the place to its right',
+    Idea: 'Stepping stones showing: 5 → 50 → 500 → 5,000 → 50,000 (each step ×10)',
+    patternMagic: 'Moving left = ×10, Moving right = ÷10',
+    tryThis: 'If 3 is in the hundreds place (300), what happens when it moves to the thousands place?',
+    bgColor: '#C2410C'
+  },
+  {
+    slideNumber: 8,
+    title: 'Building Numbers - Composition!',
+    concept: 'Composing means putting smaller numbers together to make bigger ones',
+    Idea: 'Number blocks showing 100 + 2 = 102, and 100 × 2 = 200',
+    example: 'We can make 1,500 by: 1,000 + 500, OR 15 × 100, OR 1,499 + 1',
+    tryThis: 'How many ways can you make 2,000? (Hint: 1,000 + 1,000 is just one way!)',
+    bgColor: '#0369A1'
+  },
+  {
+    slideNumber: 9,
+    title: 'Taking Numbers Apart - Decomposition!',
+    concept: 'Decomposing breaks big numbers into smaller, easier pieces',
+    Idea: 'Number 53,125 breaking apart like opening a present: 50,000 + 3,000 + 100 + 20 + 5',
+    ways: ['50,000 + 3,125', '53,000 + 125', '40,000 + 13,125'],
+    tryThis: 'Decompose 67,892 in two different ways!',
+    bgColor: '#4F46E5'
+  },
+  {
+    slideNumber: 10,
+    title: 'Numbers in Our World!',
+    concept: ".Big numbers aren't just for math - they're everywhere in real life!",
+    examples: [
+      'Toronto population: 2,794,356 people',
+      'Your daily steps: 12,500 steps',
+      'School library books: 15,847 books',
+      'Video game high score: 99,999 points'
+    ],
+    tryThis: 'Estimate how many students are in your entire school - is it closer to 1,000 or 100?',
+    bgColor: '#065F46'
+  },
+  {
+    slideNumber: 11,
+    title: 'Place Value Chart Fun!',
+    concept: 'Use a place value chart to break down big numbers quickly',
+    Idea: 'Chart filled in for 84,263 with labeled columns',
+    activity: 'Write a number on your board and label each digit’s place value',
+    tryThis: 'Make a chart for 65,409. What’s in the thousands place?',
+    bgColor: '#991B1B'
+  },
+  {
+    slideNumber: 12,
+    title: 'Comparing Big Numbers!',
+    concept: 'Start comparing digits from left to right to find which number is bigger',
+    Idea: 'Side-by-side comparison of 56,492 and 56,391 with highlights on different digits',
+    rule: 'First different digit tells us which number is greater',
+    tryThis: 'Which is bigger: 45,103 or 45,301?',
+    bgColor: '#7C3D12'
+  },
+  {
+    slideNumber: 13,
+    title: 'Ordering Numbers!',
+    concept: 'Line numbers up from greatest to least or least to greatest by comparing place values',
+    Idea: 'Number line or arrows with 32,456 < 33,401 < 34,010',
+    example: 'Small to big: 42,103, 42,130, 42,301',
+    tryThis: 'Put these in order: 55,001, 54,999, 55,010',
+    bgColor: '#166534'
+  },
+  {
+    slideNumber: 14,
+    title: 'Estimating with Place Value!',
+    concept: 'Use place value to round numbers and estimate faster',
+    Idea: 'Numbers like 47,892 rounded to 50,000 or 47,900',
+    tip: 'Look at the digit to the right of the place you’re rounding to!',
+    tryThis: 'Round 23,589 to the nearest thousand. What did you get?',
+    bgColor: '#5B21B6'
+  },
+  {
+    slideNumber: 15,
+    title: 'Using Number Lines!',
+    concept: 'Place numbers on a number line to see where they belong and compare easily',
+    Idea: 'Number line with marks at 10,000, 20,000...100,000',
+    connection: 'It’s like a ruler for big numbers!',
+    tryThis: 'Plot 34,500 on a number line between 30,000 and 40,000',
+    bgColor: '#0F766E'
+  },
+  {
+    slideNumber: 16,
+    title: 'Word Form vs Standard Form!',
+    concept: 'Numbers can be written in words or digits - both mean the same thing!',
+    Idea: 'Match-up activity showing "sixty-two thousand one hundred eight" = 62,108',
+    tip: 'Say it out loud to help write it in word form!',
+    tryThis: 'Write 45,019 in word form. Then try 71,402!',
+    bgColor: '#C2410C'
+  },
+  {
+    slideNumber: 17,
+    title: 'What’s Missing?',
+    concept: 'Sometimes you’ll see a number with a missing digit - use clues to solve the mystery!',
+    Idea: '45_07 shown with possible answers (45007, 45507, 45607)',
+    puzzle: 'The number is greater than 45,500 but less than 45,600. What’s the missing digit?',
+    tryThis: 'Find the missing digit in 3_2,145 if the number is between 32,000 and 33,000',
+    bgColor: '#7E22CE'
+  },
+  {
+    slideNumber: 18,
+    title: 'You’re a Place Value Pro!',
+    concept: 'You’ve mastered reading, writing, and understanding big numbers!',
+    Idea: 'Certificate with “Place Value Detective” title and a magnifying glass',
+    celebrate: 'Give yourself a round of applause and show off your skills!',
+    tryThis: 'Create your own 5-digit number and explain its place value like a teacher!',
+    bgColor: '#BE123C'
+  }
+];
 
   const currentSlide = slidesData[currentSlideIndex];
+  const currentProgressBarColor = currentSlide.bgColor || '#667eea';
 
-  const nextSlide = () => {
-    if (currentSlideIndex < slidesData.length - 1) {
-      setCurrentSlideIndex(currentSlideIndex + 1);
-    }
+  const handleNextSlide = () => {
+    setCurrentSlideIndex((prevIndex) => (prevIndex + 1) % slidesData.length);
   };
 
-  const prevSlide = () => {
-    if (currentSlideIndex > 0) {
-      setCurrentSlideIndex(currentSlideIndex - 1);
-    }
+  const handlePrevSlide = () => {
+    setCurrentSlideIndex((prevIndex) =>
+      (prevIndex - 1 + slidesData.length) % slidesData.length
+    );
   };
+
+  // Helper function to render styled info blocks
+  const renderInfoBlock = (label, value) => (
+    <div style={{
+      backgroundColor: '#F0F4F8',
+      padding: '15px',
+      borderRadius: '10px',
+      marginBottom: '15px',
+      textAlign: 'left',
+      borderLeft: `5px solid ${currentSlide.bgColor || '#667eea'}`
+    }}>
+      <strong style={{ color: currentSlide.bgColor || '#667eea' }}>{label}:</strong>
+      <span style={{ marginLeft: '8px', color: '#333' }}>{value}</span>
+    </div>
+  );
 
   return (
     <div style={{
       minHeight: '100vh',
       width: '100vw',
-      background: 'linear-gradient(135deg, #d4a373 0%, #a27b5c 100%)', // Claude-like gradient
+      background: 'linear-gradient(135deg, #A7BFEB 0%, #87A9EB 100%)',
       display: 'flex',
       flexDirection: 'column',
       position: 'relative',
       padding: 0,
       margin: 0,
-      overflowX: 'hidden', // Prevent horizontal scroll
+      overflowX: 'hidden',
+      fontFamily: 'Arial, sans-serif',
     }}>
-      {/* AI Toggle Section */}
-      <div style={{
-        position: 'absolute',
-        top: isMobile ? '10px' : '20px', // Adjusted for mobile
-        left: '50%',
-        transform: 'translateX(-50%)',
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        borderRadius: '25px',
-        padding: isMobile ? '2px' : '4px', // Adjusted for mobile
-        display: 'flex',
-        zIndex: 15,
-        boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-        backdropFilter: 'blur(10px)',
-        width: isMobile ? '90%' : 'auto', // Occupy more width on mobile
-        justifyContent: 'center', // Center buttons on mobile
-      }}>
-        <button
-          onClick={() => handleToggle('chatgpt')}
-          style={{
-            padding: isMobile ? '8px 12px' : '10px 20px', // Adjusted for mobile
-            borderRadius: '20px',
-            border: 'none',
-            fontWeight: 'bold',
-            fontSize: isMobile ? '12px' : '14px', // Adjusted for mobile
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            backgroundColor: selectedAI === 'chatgpt' ? '#667eea' : 'transparent',
-            color: selectedAI === 'chatgpt' ? 'white' : '#667eea',
-            boxShadow: selectedAI === 'chatgpt' ? '0 2px 8px rgba(102, 126, 234, 0.3)' : 'none',
-            flex: isMobile ? 1 : 'none', // Make buttons take equal width on mobile
-          }}
-        >
-          ChatGPT
-        </button>
-        <button
-          onClick={() => handleToggle('claude')}
-          style={{
-            padding: isMobile ? '8px 12px' : '10px 20px', // Adjusted for mobile
-            borderRadius: '20px',
-            border: 'none',
-            fontWeight: 'bold',
-            fontSize: isMobile ? '12px' : '14px', // Adjusted for mobile
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            backgroundColor: selectedAI === 'claude' ? '#FF6B6B' : 'transparent', // Claude specific color
-            color: selectedAI === 'claude' ? 'white' : '#FF6B6B',
-            boxShadow: selectedAI === 'claude' ? '0 2px 8px rgba(255, 107, 107, 0.3)' : 'none',
-            flex: isMobile ? 1 : 'none', // Make buttons take equal width on mobile
-          }}
-        >
-          Claude
-        </button>
-        <button
-          onClick={() => handleToggle('gemini')}
-          style={{
-            padding: isMobile ? '8px 12px' : '10px 20px', // Adjusted for mobile
-            borderRadius: '20px',
-            border: 'none',
-            fontWeight: 'bold',
-            fontSize: isMobile ? '12px' : '14px', // Adjusted for mobile
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            backgroundColor: selectedAI === 'gemini' ? '#4285F4' : 'transparent',
-            color: selectedAI === 'gemini' ? 'white' : '#4285F4',
-            boxShadow: selectedAI === 'gemini' ? '0 2px 8px rgba(66, 133, 244, 0.3)' : 'none',
-            flex: isMobile ? 1 : 'none', // Make buttons take equal width on mobile
-          }}
-        >
-          Gemini
-        </button>
-      </div>
-
-      {/* AI Prompt Label */}
-      <div style={{
-        position: 'absolute',
-        top: isMobile ? '60px' : '20px', // Adjusted position for mobile
-        right: '20px',
-        backgroundColor: 'black',
-        color: 'white',
-        padding: '8px 16px',
-        borderRadius: '20px',
-        fontSize: '14px',
-        fontWeight: 'bold',
-        zIndex: 10,
-        display: isMobile && selectedAI === 'claude' ? 'none' : 'block' // Hide on mobile if Claude
-      }}>
-        {selectedAI === 'chatgpt' ? 'ChatGPT' : (selectedAI === 'claude' ? 'Claude' : 'Gemini')} Prompt
-      </div>
-
-      {/* Main Content */}
       <div style={{
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: isMobile ? '10px' : '20px', // Smaller padding for mobile
-        paddingTop: isMobile ? '120px' : '20px', // Add more top padding on mobile to avoid overlap
+        padding: isMobile ? '10px' : '20px',
         textAlign: 'center',
-        overflowY: 'auto', // Allow scrolling if content overflows
+        overflowY: 'auto',
       }}>
-        {/* Slide Card */}
         <div style={{
-          backgroundColor: 'rgba(255, 250, 245, 0.95)', // Slightly warmer white for Claude
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
           borderRadius: '20px',
-          padding: isMobile ? '20px' : '40px', // Smaller padding for mobile
-          maxWidth: isMobile ? '95%' : '600px', // Use percentage for mobile width
+          padding: isMobile ? '20px' : '40px',
+          maxWidth: isMobile ? '95%' : '600px',
           width: '100%',
           boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
           backdropFilter: 'blur(10px)',
-          border: `4px solid ${currentSlide.bgColor || '#A27B5C'}`, // Default border if bgColor missing
+          border: `4px solid ${currentSlide.bgColor || '#667eea'}`,
           position: 'relative',
-          minHeight: isMobile ? 'calc(100vh - 180px)' : 'auto', // Ensure some height on mobile
+          minHeight: isMobile ? 'calc(100vh - 180px)' : 'auto',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
+          color: '#333',
         }}>
 
-          {/* Previous Button */}
           <button
-            onClick={prevSlide}
+            onClick={handlePrevSlide}
             disabled={currentSlideIndex === 0}
             style={{
-              backgroundColor: currentSlideIndex === 0 ? '#ccc' : (currentSlide.bgColor || '#A27B5C'),
-              color: 'white',
-              border: 'none',
-              width: isMobile ? '40px' : '50px', // Smaller button for mobile
-              height: isMobile ? '40px' : '50px', // Smaller button for mobile
-              borderRadius: '50%',
-              fontSize: isMobile ? '1.2rem' : '1.5rem', // Smaller font for mobile
-              cursor: currentSlideIndex === 0 ? 'not-allowed' : 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'all 0.3s ease',
-              opacity: currentSlideIndex === 0 ? 0.5 : 1,
-              position: 'absolute',
-              top: '50%',
-              left: isMobile ? '5px' : '-25px', // Adjusted position for mobile
-              transform: 'translateY(-50%)',
-              zIndex: 20
+              backgroundColor: currentSlideIndex === 0 ? '#ccc' : (currentSlide.bgColor || '#667eea'),
+              color: 'white', border: 'none', width: isMobile ? '40px' : '50px', height: isMobile ? '40px' : '50px', borderRadius: '50%', fontSize: isMobile ? '1.2rem' : '1.5rem', cursor: currentSlideIndex === 0 ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.3s ease', opacity: currentSlideIndex === 0 ? 0.5 : 1, position: 'absolute', top: '50%', left: isMobile ? '5px' : '-25px', transform: 'translateY(-50%)', zIndex: 20
             }}
             aria-label="Previous slide"
           >
             ←
           </button>
 
-          {/* Next Button */}
           <button
-            onClick={nextSlide}
+            onClick={handleNextSlide}
             disabled={currentSlideIndex === slidesData.length - 1}
             style={{
-              backgroundColor: currentSlideIndex === slidesData.length - 1 ? '#ccc' : (currentSlide.bgColor || '#A27B5C'),
-              color: 'white',
-              border: 'none',
-              width: isMobile ? '40px' : '50px', // Smaller button for mobile
-              height: isMobile ? '40px' : '50px', // Smaller button for mobile
-              borderRadius: '50%',
-              fontSize: isMobile ? '1.2rem' : '1.5rem', // Smaller font for mobile
-              cursor: currentSlideIndex === slidesData.length - 1 ? 'not-allowed' : 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'all 0.3s ease',
-              opacity: currentSlideIndex === slidesData.length - 1 ? 0.5 : 1,
-              position: 'absolute',
-              top: '50%',
-              right: isMobile ? '5px' : '-25px', // Adjusted position for mobile
-              transform: 'translateY(-50%)',
-              zIndex: 20
+              backgroundColor: currentSlideIndex === slidesData.length - 1 ? '#ccc' : (currentSlide.bgColor || '#667eea'),
+              color: 'white', border: 'none', width: isMobile ? '40px' : '50px', height: isMobile ? '40px' : '50px', borderRadius: '50%', fontSize: isMobile ? '1.2rem' : '1.5rem', cursor: currentSlideIndex === slidesData.length - 1 ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.3s ease', opacity: currentSlideIndex === slidesData.length - 1 ? 0.5 : 1, position: 'absolute', top: '50%', right: isMobile ? '5px' : '-25px', transform: 'translateY(-50%)', zIndex: 20
             }}
             aria-label="Next slide"
           >
             →
           </button>
 
-          {/* Slide Number */}
           <div style={{
-            position: 'absolute',
-            top: isMobile ? '-10px' : '-15px', // Adjusted for mobile
-            left: isMobile ? '15px' : '30px', // Adjusted for mobile
-            backgroundColor: currentSlide.bgColor || '#A27B5C',
-            color: 'white',
-            padding: isMobile ? '6px 15px' : '8px 20px', // Adjusted for mobile
-            borderRadius: '15px',
-            fontSize: isMobile ? '14px' : '16px', // Adjusted for mobile
-            fontWeight: 'bold'
+            position: 'absolute', top: isMobile ? '-10px' : '-15px', left: isMobile ? '15px' : '30px', backgroundColor: currentSlide.bgColor || '#667eea', color: 'white', padding: isMobile ? '6px 15px' : '8px 20px', borderRadius: '15px', fontSize: isMobile ? '14px' : '16px', fontWeight: 'bold', boxShadow: '0 2px 5px rgba(0,0,0,0.2)', zIndex: 10,
           }}>
             Slide {currentSlide.slideNumber}
           </div>
 
-          {/* Title */}
-          <h1 style={{
-            fontSize: isMobile ? '1.8rem' : '3rem', // Smaller font for mobile
-            color: currentSlide.bgColor || '#A27B5C',
-            marginBottom: '20px',
-            fontWeight: 'bold',
-            textShadow: '1px 1px 3px rgba(0,0,0,0.1)'
-          }}>
-            {currentSlide.title}
-          </h1>
+          {currentSlide.title && (
+            <h1 style={{ fontSize: isMobile ? '1.8rem' : '3rem', marginBottom: '20px', color: currentSlide.bgColor || '#4F46E5', fontWeight: 'bold', textShadow: '1px 1px 3px rgba(0,0,0,0.1)' }}>
+              {currentSlide.title}
+            </h1>
+          )}
 
-          {/* Concept */}
-          <div style={{
-            backgroundColor: `${currentSlide.bgColor ? currentSlide.bgColor + '20' : 'rgba(162,123,92,0.1)'}`,
-            padding: isMobile ? '15px' : '20px', // Smaller padding for mobile
-            borderRadius: '15px',
-            marginBottom: '30px',
-            border: `2px solid ${currentSlide.bgColor ? currentSlide.bgColor + '40' : 'rgba(162,123,92,0.25)'}`
-          }}>
-            <h2 style={{
-              fontSize: isMobile ? '1.2rem' : '1.5rem', // Smaller font for mobile
-              color: currentSlide.bgColor || '#A27B5C',
-              margin: '0',
-              fontWeight: '600'
-            }}>
-              {currentSlide.concept}
-            </h2>
-          </div>
-
-          {/* Content */}
-          <div style={{
-            fontSize: isMobile ? '1rem' : '1.3rem', // Smaller font for mobile
-            color: '#4A3B31',
-            lineHeight: '1.6',
-            marginBottom: '25px',
-          }}>
-             {currentSlide.content}
-          </div>
-
-          {/* Visual Example */}
-          {currentSlide.visual && (
+          {currentSlide.concept && (
             <div style={{
-              backgroundColor: '#FDF5EF',
-              padding: isMobile ? '15px' : '20px', // Smaller padding for mobile
-              borderRadius: '10px',
-              marginBottom: '25px',
-              fontSize: isMobile ? '0.9rem' : '1.1rem', // Smaller font for mobile
-              color: '#5D4037',
-              fontFamily: 'serif',
-              whiteSpace: 'pre-line'
+              backgroundColor: `${currentSlide.bgColor ? currentSlide.bgColor + '20' : 'rgba(102,126,234,0.1)'}`, padding: '15px', borderRadius: '15px', marginBottom: '20px', border: `2px solid ${currentSlide.bgColor ? currentSlide.bgColor + '40' : 'rgba(102,126,234,0.25)'}`
             }}>
-              Visual: {currentSlide.visual}
+              <h2 style={{ fontSize: isMobile ? '1.2rem' : '1.5rem', color: currentSlide.bgColor || '#4F46E5', margin: 0, fontWeight: '600' }}>
+                {currentSlide.concept}
+              </h2>
             </div>
           )}
 
-          {/* Example */}
-          {currentSlide.example && (
+          {currentSlide.Idea && (
             <div style={{
-              backgroundColor: '#EFEBE9',
-              padding: isMobile ? '10px' : '15px', // Smaller padding for mobile
-              borderRadius: '10px',
-              marginBottom: '25px',
-              fontSize: isMobile ? '0.9rem' : '1.1rem', // Smaller font for mobile
-              color: '#3E2723',
-              border: `2px solid ${currentSlide.bgColor ? currentSlide.bgColor + '30' : 'rgba(162,123,92,0.2)'}`,
-              whiteSpace: 'pre-line'
+              backgroundColor: '#F5F5F5', padding: '15px', borderRadius: '10px', marginBottom: '15px', fontSize: '1rem', color: '#555', fontFamily: 'serif'
             }}>
-              {currentSlide.example}
+              <strong>Idea:</strong> {currentSlide.Idea}
             </div>
           )}
 
-          {/* Try This */}
-          <div style={{
-            backgroundColor: '#D7CCC8',
-            padding: isMobile ? '15px' : '20px', // Smaller padding for mobile
-            borderRadius: '15px',
-            border: `2px solid ${currentSlide.bgColor || '#A27B5C'}`,
-            marginBottom: '20px'
-          }}>
+          {currentSlide.sayIt && renderInfoBlock('Say It', currentSlide.sayIt)}
+          {currentSlide.realLife && renderInfoBlock('Real Life', currentSlide.realLife)}
+          {currentSlide.tip && renderInfoBlock('Tip', currentSlide.tip)}
+          {currentSlide.fact && renderInfoBlock('Fact', currentSlide.fact)}
+          {currentSlide.patternMagic && renderInfoBlock('Pattern Magic', currentSlide.patternMagic)}
+          {currentSlide.example && renderInfoBlock('Example', currentSlide.example)}
+          {currentSlide.rule && renderInfoBlock('Rule', currentSlide.rule)}
+          {currentSlide.activity && renderInfoBlock('Activity', currentSlide.activity)}
+          {currentSlide.connection && renderInfoBlock('Connection', currentSlide.connection)}
+          {currentSlide.puzzle && renderInfoBlock('Puzzle', currentSlide.puzzle)}
+          {currentSlide.celebrate && renderInfoBlock('Celebrate', currentSlide.celebrate)}
+          
+          {currentSlide.examples && (
             <div style={{
-              fontSize: isMobile ? '1.1rem' : '1.2rem', // Smaller font for mobile
-              color: '#260F08',
-              fontWeight: 'bold'
+              backgroundColor: '#E0E0E0', padding: '15px', borderRadius: '10px', marginBottom: '15px', color: '#444', textAlign: 'left'
             }}>
-              {currentSlide.tryThis}
-            </div>
-            {currentSlide.practice && (
-              <ul style={{
-                listStyle: 'none',
-                padding: 0,
-                marginTop: '10px',
-                textAlign: 'left',
-                fontSize: isMobile ? '0.9rem' : '1rem', // Smaller font for mobile
-              }}>
-                {currentSlide.practice.map((item, idx) => (
-                  <li key={idx} style={{ marginBottom: '5px' }}>
-                    {item}
-                  </li>
-                ))}
+              <h3 style={{ marginTop: 0, color: currentSlide.bgColor || '#4F46E5' }}>Examples:</h3>
+              <ul style={{ listStyleType: 'disc', paddingLeft: '20px' }}>
+                {currentSlide.examples.map((item, index) => <li key={index}>{item}</li>)}
               </ul>
-            )}
-          </div>
+            </div>
+          )}
+
+          {currentSlide.ways && (
+            <div style={{ backgroundColor: '#E0E0E0', padding: '15px', borderRadius: '10px', marginBottom: '15px', color: '#444', textAlign: 'left' }}>
+              <h3 style={{ marginTop: 0, color: currentSlide.bgColor || '#4F46E5' }}>Ways to Decompose:</h3>
+              {Array.isArray(currentSlide.ways) ? (
+                <ul style={{ listStyleType: 'disc', paddingLeft: '20px' }}>
+                  {currentSlide.ways.map((item, index) => <li key={index}>{item}</li>)}
+                </ul>
+              ) : (
+                <ul style={{ listStyleType: 'none', padding: 0 }}>
+                  {Object.entries(currentSlide.ways).map(([key, value]) => (
+                    <li key={key}><strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong> {value}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+
+          {currentSlide.tryThis && (
+            <div style={{
+              backgroundColor: '#FFFBEB', padding: '15px', borderRadius: '15px', border: `2px solid #FBBF24`, margin: '20px 0'
+            }}>
+              <p style={{ fontSize: isMobile ? '1.1rem' : '1.2rem', fontWeight: 'bold', color: '#B45309', margin: 0 }}>
+                💡 Try This: {currentSlide.tryThis}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Navigation - Progress Indicator only */}
       <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '15px',
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(10px)',
-        position: 'relative', // Ensure it stays at the bottom
-        bottom: 0,
-        width: '100%',
-        boxSizing: 'border-box', // Include padding in width
+        display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '15px', backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)', position: 'relative', bottom: 0, width: '100%', boxSizing: 'border-box', gap: '20px',
       }}>
-        {/* Progress Indicator */}
-        <div style={{
-          display: 'flex',
-          gap: '10px',
-          alignItems: 'center'
-        }}>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           {slidesData.map((_, index) => (
             <div
               key={index}
               style={{
-                width: isMobile ? '8px' : '12px', // Smaller dots for mobile
-                height: isMobile ? '8px' : '12px', // Smaller dots for mobile
-                borderRadius: '50%',
-                backgroundColor: index === currentSlideIndex ? (currentSlide.bgColor || '#A27B5C') : 'rgba(255, 255, 255, 0.4)',
-                transition: 'all 0.3s ease'
+                width: isMobile ? '8px' : '12px', height: isMobile ? '8px' : '12px', borderRadius: '50%', backgroundColor: index === currentSlideIndex ? currentProgressBarColor : 'rgba(255, 255, 255, 0.4)', transition: 'all 0.3s ease'
               }}
             />
           ))}
-          <span style={{
-            color: 'white',
-            fontSize: isMobile ? '0.9rem' : '1.1rem', // Smaller font for mobile
-            fontWeight: 'bold',
-            marginLeft: '10px', // Reduced margin for mobile
-          }}>
-            {currentSlideIndex + 1} / {slidesData.length}
+          <span style={{ color: 'white', fontSize: isMobile ? '0.9rem' : '1.1rem', fontWeight: 'bold', marginLeft: '5px' }}>
+            {currentSlideIndex + 1}/{slidesData.length}
           </span>
         </div>
       </div>

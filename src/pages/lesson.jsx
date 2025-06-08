@@ -1,22 +1,18 @@
-// C:/Users/HP/ui/src/pages/lesson.jsx
-import React, { useState, useEffect } from 'react'; // Import useEffect for window resize
+import React, { useState, useEffect } from 'react';
 
-const ChatGPTLesson = ({ onToggleAI }) => { // Renamed from Lesson for clarity
+const ChatGPTLesson = ({ onToggleAI, onSelectPrompt }) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-  const [selectedAI, setSelectedAI] = useState('chatgpt');
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768); // State for mobile detection
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  // Update isMobile on window resize
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768); // Define your mobile breakpoint
+      setIsMobile(window.innerWidth < 768);
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Mock slidesData for demonstration - replace with your actual data
- const slidesData = [
+  const slidesData = [
     {
       slideNumber: 1,
       title: 'Welcome to Numberland!',
@@ -90,7 +86,7 @@ const ChatGPTLesson = ({ onToggleAI }) => { // Renamed from Lesson for clarity
       concept: 'When comparing numbers, start from the leftmost digit (the largest place value).',
       content: 'Is 54,321 greater than or less than 54,123? The hundreds place decides! 300 > 100, so 54,321 is greater!',
       tryThis: 'Which number is smaller: 87,654 or 87,645?',
-      bgColor: '#7C2D12',
+      bgColor: '#7C3D12',
     },
     {
       slideNumber: 10,
@@ -169,176 +165,80 @@ const ChatGPTLesson = ({ onToggleAI }) => { // Renamed from Lesson for clarity
         '2. Write "seventy-two thousand, eight hundred six" in standard form.',
         '3. Which number is greater: 43,210 or 43,120?',
         '4. Round 67,890 to the nearest thousand.',
-        '5. Write 90,000 + 4,000 + 200 + 10 + 7 in standard form.'
+        '5. Write 90,000 + 4,000 + 200 + 10 + 7 in standard form.',
       ],
       tryThis: 'Review any questions you found tricky!',
       bgColor: '#059669',
     },
   ];
 
-  const handleToggle = (aiType) => {
-    setSelectedAI(aiType);
-    if (onToggleAI) {
-      onToggleAI(aiType);
-    }
-  };
-
   const currentSlide = slidesData[currentSlideIndex];
+  const currentProgressBarColor = currentSlide.bgColor || '#667eea';
 
-  const nextSlide = () => {
-    if (currentSlideIndex < slidesData.length - 1) {
-      setCurrentSlideIndex(currentSlideIndex + 1);
-    }
+  const handleNextSlide = () => {
+    setCurrentSlideIndex((prevIndex) => (prevIndex + 1) % slidesData.length);
   };
 
-  const prevSlide = () => {
-    if (currentSlideIndex > 0) {
-      setCurrentSlideIndex(currentSlideIndex - 1);
-    }
+  const handlePrevSlide = () => {
+    setCurrentSlideIndex((prevIndex) =>
+      (prevIndex - 1 + slidesData.length) % slidesData.length
+    );
   };
 
   return (
     <div style={{
       minHeight: '100vh',
       width: '100vw',
-      background: 'linear-gradient(135deg, #A7BFEB 0%, #87A9EB 100%)', // Original ChatGPT-like gradient
+      background: 'linear-gradient(135deg, #A7BFEB 0%, #87A9EB 100%)',
       display: 'flex',
       flexDirection: 'column',
       position: 'relative',
       padding: 0,
       margin: 0,
-      overflowX: 'hidden', // Prevent horizontal scroll
+      overflowX: 'hidden',
+      fontFamily: 'Arial, sans-serif',
     }}>
-      {/* AI Toggle Section */}
-      <div style={{
-        position: 'absolute',
-        top: isMobile ? '10px' : '20px', // Adjusted for mobile
-        left: '50%',
-        transform: 'translateX(-50%)',
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        borderRadius: '25px',
-        padding: isMobile ? '2px' : '4px', // Adjusted for mobile
-        display: 'flex',
-        zIndex: 15,
-        boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-        backdropFilter: 'blur(10px)',
-        width: isMobile ? '90%' : 'auto', // Occupy more width on mobile
-        justifyContent: 'center', // Center buttons on mobile
-      }}>
-        <button
-          onClick={() => handleToggle('chatgpt')}
-          style={{
-            padding: isMobile ? '8px 12px' : '10px 20px', // Adjusted for mobile
-            borderRadius: '20px',
-            border: 'none',
-            fontWeight: 'bold',
-            fontSize: isMobile ? '12px' : '14px', // Adjusted for mobile
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            backgroundColor: selectedAI === 'chatgpt' ? '#667eea' : 'transparent',
-            color: selectedAI === 'chatgpt' ? 'white' : '#667eea',
-            boxShadow: selectedAI === 'chatgpt' ? '0 2px 8px rgba(102, 126, 234, 0.3)' : 'none',
-            flex: isMobile ? 1 : 'none', // Make buttons take equal width on mobile
-          }}
-        >
-          ChatGPT
-        </button>
-        <button
-          onClick={() => handleToggle('claude')}
-          style={{
-            padding: isMobile ? '8px 12px' : '10px 20px', // Adjusted for mobile
-            borderRadius: '20px',
-            border: 'none',
-            fontWeight: 'bold',
-            fontSize: isMobile ? '12px' : '14px', // Adjusted for mobile
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            backgroundColor: selectedAI === 'claude' ? '#FF6B6B' : 'transparent',
-            color: selectedAI === 'claude' ? 'white' : '#FF6B6B',
-            boxShadow: selectedAI === 'claude' ? '0 2px 8px rgba(255, 107, 107, 0.3)' : 'none',
-            flex: isMobile ? 1 : 'none', // Make buttons take equal width on mobile
-          }}
-        >
-          Claude
-        </button>
-        <button
-          onClick={() => handleToggle('gemini')}
-          style={{
-            padding: isMobile ? '8px 12px' : '10px 20px', // Adjusted for mobile
-            borderRadius: '20px',
-            border: 'none',
-            fontWeight: 'bold',
-            fontSize: isMobile ? '12px' : '14px', // Adjusted for mobile
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            backgroundColor: selectedAI === 'gemini' ? '#4285F4' : 'transparent',
-            color: selectedAI === 'gemini' ? 'white' : '#4285F4',
-            boxShadow: selectedAI === 'gemini' ? '0 2px 8px rgba(66, 133, 244, 0.3)' : 'none',
-            flex: isMobile ? 1 : 'none', // Make buttons take equal width on mobile
-          }}
-        >
-          Gemini
-        </button>
-      </div>
-
-      {/* AI Prompt Label */}
-      <div style={{
-        position: 'absolute',
-        top: isMobile ? '60px' : '20px', // Adjusted position for mobile
-        right: '20px',
-        backgroundColor: 'black',
-        color: 'white',
-        padding: '8px 16px',
-        borderRadius: '20px',
-        fontSize: '14px',
-        fontWeight: 'bold',
-        zIndex: 10,
-        display: isMobile && selectedAI === 'chatgpt' ? 'none' : 'block' // Hide on mobile if ChatGPT
-      }}>
-        {selectedAI === 'chatgpt' ? 'ChatGPT' : (selectedAI === 'claude' ? 'Claude' : 'Gemini')} Prompt
-      </div>
-
-      {/* Main Content */}
+      {/* Main Content Area - acts as the "slide card" */}
       <div style={{
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: isMobile ? '10px' : '20px', // Smaller padding for mobile
-        paddingTop: isMobile ? '120px' : '20px', // Add more top padding on mobile to avoid overlap
+        padding: isMobile ? '10px' : '20px',
+        paddingTop: isMobile ? '10px' : '20px',
         textAlign: 'center',
-        overflowY: 'auto', // Allow scrolling if content overflows
+        overflowY: 'auto',
       }}>
-        {/* Slide Card */}
         <div style={{
           backgroundColor: 'rgba(255, 255, 255, 0.95)',
           borderRadius: '20px',
-          padding: isMobile ? '20px' : '40px', // Smaller padding for mobile
-          maxWidth: isMobile ? '95%' : '600px', // Use percentage for mobile width
+          padding: isMobile ? '20px' : '40px',
+          maxWidth: isMobile ? '95%' : '600px',
           width: '100%',
           boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
           backdropFilter: 'blur(10px)',
-          border: `4px solid ${currentSlide.bgColor || '#667eea'}`, // Default border if bgColor missing
+          border: `4px solid ${currentSlide.bgColor || '#667eea'}`,
           position: 'relative',
-          minHeight: isMobile ? 'calc(100vh - 180px)' : 'auto', // Ensure some height on mobile
+          minHeight: isMobile ? 'calc(100vh - 180px)' : 'auto',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
+          color: '#333',
         }}>
 
           {/* Previous Button */}
           <button
-            onClick={prevSlide}
+            onClick={handlePrevSlide}
             disabled={currentSlideIndex === 0}
             style={{
               backgroundColor: currentSlideIndex === 0 ? '#ccc' : (currentSlide.bgColor || '#667eea'),
               color: 'white',
               border: 'none',
-              width: isMobile ? '40px' : '50px', // Smaller button for mobile
-              height: isMobile ? '40px' : '50px', // Smaller button for mobile
+              width: isMobile ? '40px' : '50px',
+              height: isMobile ? '40px' : '50px',
               borderRadius: '50%',
-              fontSize: isMobile ? '1.2rem' : '1.5rem', // Smaller font for mobile
+              fontSize: isMobile ? '1.2rem' : '1.5rem',
               cursor: currentSlideIndex === 0 ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -347,7 +247,7 @@ const ChatGPTLesson = ({ onToggleAI }) => { // Renamed from Lesson for clarity
               opacity: currentSlideIndex === 0 ? 0.5 : 1,
               position: 'absolute',
               top: '50%',
-              left: isMobile ? '5px' : '-25px', // Adjusted position for mobile
+              left: isMobile ? '5px' : '-25px',
               transform: 'translateY(-50%)',
               zIndex: 20
             }}
@@ -358,16 +258,16 @@ const ChatGPTLesson = ({ onToggleAI }) => { // Renamed from Lesson for clarity
 
           {/* Next Button */}
           <button
-            onClick={nextSlide}
+            onClick={handleNextSlide}
             disabled={currentSlideIndex === slidesData.length - 1}
             style={{
               backgroundColor: currentSlideIndex === slidesData.length - 1 ? '#ccc' : (currentSlide.bgColor || '#667eea'),
               color: 'white',
               border: 'none',
-              width: isMobile ? '40px' : '50px', // Smaller button for mobile
-              height: isMobile ? '40px' : '50px', // Smaller button for mobile
+              width: isMobile ? '40px' : '50px',
+              height: isMobile ? '40px' : '50px',
               borderRadius: '50%',
-              fontSize: isMobile ? '1.2rem' : '1.5rem', // Smaller font for mobile
+              fontSize: isMobile ? '1.2rem' : '1.5rem',
               cursor: currentSlideIndex === slidesData.length - 1 ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -376,7 +276,7 @@ const ChatGPTLesson = ({ onToggleAI }) => { // Renamed from Lesson for clarity
               opacity: currentSlideIndex === slidesData.length - 1 ? 0.5 : 1,
               position: 'absolute',
               top: '50%',
-              right: isMobile ? '5px' : '-25px', // Adjusted position for mobile
+              right: isMobile ? '5px' : '-25px',
               transform: 'translateY(-50%)',
               zIndex: 20
             }}
@@ -385,68 +285,62 @@ const ChatGPTLesson = ({ onToggleAI }) => { // Renamed from Lesson for clarity
             →
           </button>
 
-          {/* Slide Number */}
+          {/* Slide Number Indicator */}
           <div style={{
             position: 'absolute',
-            top: isMobile ? '-10px' : '-15px', // Adjusted for mobile
-            left: isMobile ? '15px' : '30px', // Adjusted for mobile
+            top: isMobile ? '-10px' : '-15px',
+            left: isMobile ? '15px' : '30px',
             backgroundColor: currentSlide.bgColor || '#667eea',
             color: 'white',
-            padding: isMobile ? '6px 15px' : '8px 20px', // Adjusted for mobile
+            padding: isMobile ? '6px 15px' : '8px 20px',
             borderRadius: '15px',
-            fontSize: isMobile ? '14px' : '16px', // Adjusted for mobile
-            fontWeight: 'bold'
-          }}>
-            Slide {currentSlide.slideNumber}
-          </div>
-
-          {/* Title */}
-          <h1 style={{
-            fontSize: isMobile ? '1.8rem' : '3rem', // Smaller font for mobile
-            color: currentSlide.bgColor || '#667eea',
-            marginBottom: '20px',
+            fontSize: isMobile ? '14px' : '16px',
             fontWeight: 'bold',
-            textShadow: '1px 1px 3px rgba(0,0,0,0.1)'
+            boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+            zIndex: 10,
           }}>
-            {currentSlide.title}
-          </h1>
+            Slide {currentSlideIndex + 1}
+          </div>
 
-          {/* Concept */}
-          <div style={{
-            backgroundColor: `${currentSlide.bgColor ? currentSlide.bgColor + '20' : 'rgba(102,126,234,0.1)'}`,
-            padding: isMobile ? '15px' : '20px', // Smaller padding for mobile
-            borderRadius: '15px',
-            marginBottom: '30px',
-            border: `2px solid ${currentSlide.bgColor ? currentSlide.bgColor + '40' : 'rgba(102,126,234,0.25)'}`
-          }}>
-            <h2 style={{
-              fontSize: isMobile ? '1.2rem' : '1.5rem', // Smaller font for mobile
-              color: currentSlide.bgColor || '#667eea',
-              margin: '0',
-              fontWeight: '600'
+          {/* Dynamically Render Slide Content */}
+          {currentSlide.title && (
+            <h1 style={{ fontSize: isMobile ? '1.8rem' : '3rem', marginBottom: '20px', color: currentSlide.bgColor || '#4F46E5', fontWeight: 'bold', textShadow: '1px 1px 3px rgba(0,0,0,0.1)' }}>
+              {currentSlide.title}
+            </h1>
+          )}
+
+          {currentSlide.concept && (
+            <div style={{
+              backgroundColor: `${currentSlide.bgColor ? currentSlide.bgColor + '20' : 'rgba(102,126,234,0.1)'}`,
+              padding: isMobile ? '15px' : '20px',
+              borderRadius: '15px',
+              marginBottom: '30px',
+              border: `2px solid ${currentSlide.bgColor ? currentSlide.bgColor + '40' : 'rgba(102,126,234,0.25)'}`
             }}>
-              {currentSlide.concept}
-            </h2>
-          </div>
+              <h2 style={{
+                fontSize: isMobile ? '1.2rem' : '1.5rem',
+                color: currentSlide.bgColor || '#4F46E5',
+                margin: '0',
+                fontWeight: '600'
+              }}>
+                Concept: {currentSlide.concept}
+              </h2>
+            </div>
+          )}
 
-          {/* Content */}
-          <div style={{
-            fontSize: isMobile ? '1rem' : '1.3rem', // Smaller font for mobile
-            color: '#333',
-            lineHeight: '1.6',
-            marginBottom: '25px',
-          }}>
-             {currentSlide.content}
-          </div>
+          {currentSlide.content && (
+            <p style={{ fontSize: isMobile ? '1.1rem' : '1.5rem', lineHeight: '1.6', marginBottom: '30px', color: '#333' }}>
+              {currentSlide.content}
+            </p>
+          )}
 
-          {/* Visual Example */}
           {currentSlide.visual && (
             <div style={{
               backgroundColor: '#F5F5F5',
-              padding: isMobile ? '15px' : '20px', // Smaller padding for mobile
+              padding: isMobile ? '15px' : '20px',
               borderRadius: '10px',
               marginBottom: '25px',
-              fontSize: isMobile ? '0.9rem' : '1.1rem', // Smaller font for mobile
+              fontSize: isMobile ? '0.9rem' : '1.1rem',
               color: '#555',
               fontFamily: 'serif',
               whiteSpace: 'pre-line'
@@ -454,58 +348,43 @@ const ChatGPTLesson = ({ onToggleAI }) => { // Renamed from Lesson for clarity
               Visual: {currentSlide.visual}
             </div>
           )}
-
-          {/* Example */}
-          {currentSlide.example && (
+          
+          {currentSlide.practice && (
             <div style={{
               backgroundColor: '#E0E0E0',
-              padding: isMobile ? '10px' : '15px', // Smaller padding for mobile
+              padding: isMobile ? '15px' : '20px',
               borderRadius: '10px',
               marginBottom: '25px',
-              fontSize: isMobile ? '0.9rem' : '1.1rem', // Smaller font for mobile
               color: '#444',
-              border: `2px solid ${currentSlide.bgColor ? currentSlide.bgColor + '30' : 'rgba(102,126,234,0.2)'}`,
-              whiteSpace: 'pre-line'
+              textAlign: 'left'
             }}>
-              {currentSlide.example}
+              <h3 style={{ marginTop: 0, color: currentSlide.bgColor || '#4F46E5' }}>Practice Questions:</h3>
+              <ul style={{ listStyleType: 'none', paddingLeft: '10px', fontSize: isMobile ? '1rem' : '1.2rem' }}>
+                {currentSlide.practice.map((item, index) => (
+                  <li key={index} style={{ marginBottom: '8px' }}>{item}</li>
+                ))}
+              </ul>
             </div>
           )}
 
-          {/* Try This */}
-          <div style={{
-            backgroundColor: '#C8C8C8',
-            padding: isMobile ? '15px' : '20px', // Smaller padding for mobile
-            borderRadius: '15px',
-            border: `2px solid ${currentSlide.bgColor || '#667eea'}`,
-            marginBottom: '20px'
-          }}>
+          {currentSlide.tryThis && (
             <div style={{
-              fontSize: isMobile ? '1.1rem' : '1.2rem', // Smaller font for mobile
-              color: '#222',
-              fontWeight: 'bold'
+              backgroundColor: '#FFFBEB',
+              padding: isMobile ? '15px' : '20px',
+              borderRadius: '15px',
+              border: `2px solid #FBBF24`,
+              marginBottom: '20px'
             }}>
-              {currentSlide.tryThis}
+              <p style={{ fontSize: isMobile ? '1.1rem' : '1.2rem', fontWeight: 'bold', color: '#B45309', margin: 0 }}>
+                💡 Try This: {currentSlide.tryThis}
+              </p>
             </div>
-            {currentSlide.practice && (
-              <ul style={{
-                listStyle: 'none',
-                padding: 0,
-                marginTop: '10px',
-                textAlign: 'left',
-                fontSize: isMobile ? '0.9rem' : '1rem', // Smaller font for mobile
-              }}>
-                {currentSlide.practice.map((item, idx) => (
-                  <li key={idx} style={{ marginBottom: '5px' }}>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          )}
+
         </div>
       </div>
 
-      {/* Navigation - Progress Indicator only */}
+      {/* Navigation and Progress at the bottom */}
       <div style={{
         display: 'flex',
         justifyContent: 'center',
@@ -513,12 +392,12 @@ const ChatGPTLesson = ({ onToggleAI }) => { // Renamed from Lesson for clarity
         padding: '15px',
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
         backdropFilter: 'blur(10px)',
-        position: 'relative', // Ensure it stays at the bottom
+        position: 'relative',
         bottom: 0,
         width: '100%',
-        boxSizing: 'border-box', // Include padding in width
+        boxSizing: 'border-box',
+        gap: '20px',
       }}>
-        {/* Progress Indicator */}
         <div style={{
           display: 'flex',
           gap: '10px',
@@ -528,21 +407,21 @@ const ChatGPTLesson = ({ onToggleAI }) => { // Renamed from Lesson for clarity
             <div
               key={index}
               style={{
-                width: isMobile ? '8px' : '12px', // Smaller dots for mobile
-                height: isMobile ? '8px' : '12px', // Smaller dots for mobile
+                width: isMobile ? '8px' : '12px',
+                height: isMobile ? '8px' : '12px',
                 borderRadius: '50%',
-                backgroundColor: index === currentSlideIndex ? (currentSlide.bgColor || '#667eea') : 'rgba(255, 255, 255, 0.4)',
+                backgroundColor: index === currentSlideIndex ? (currentProgressBarColor) : 'rgba(255, 255, 255, 0.4)',
                 transition: 'all 0.3s ease'
               }}
             />
           ))}
           <span style={{
             color: 'white',
-            fontSize: isMobile ? '0.9rem' : '1.1rem', // Smaller font for mobile
+            fontSize: isMobile ? '0.9rem' : '1.1rem',
             fontWeight: 'bold',
-            marginLeft: '10px', // Reduced margin for mobile
+            marginLeft: '5px',
           }}>
-            {currentSlideIndex + 1} / {slidesData.length}
+            {currentSlideIndex + 1}/{slidesData.length}
           </span>
         </div>
       </div>
